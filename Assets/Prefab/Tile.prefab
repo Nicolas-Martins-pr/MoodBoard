@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4583689469479264130}
   - component: {fileID: 1675864430482096552}
   - component: {fileID: 6707010978875403356}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 440776374955327726}
   - component: {fileID: 5798125206677771549}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,6 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   v_isEnemy: 0
   v_isPowerUp: 0
+  TileCheckAroundDistance: 4
   r_Enemy: {fileID: 0}
   r_PowerUp: {fileID: 0}
   r_TilesAround: []
