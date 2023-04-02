@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class LevelController : Singleton<LevelController>
 {
+    [Header("References")]
     private List<Tile> LevelTileList = new List<Tile>();
+    [SerializeField]
+    private GameObject TilePrefab;
+    [SerializeField]
+    private List<Enemy> Enemies = new List<Enemy>();
     // Start is called before the first frame update
     void Start()
     {
