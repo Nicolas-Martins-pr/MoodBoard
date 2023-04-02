@@ -9,7 +9,9 @@ public class LevelController : Singleton<LevelController>
     [SerializeField]
     private GameObject TilePrefab;
     [SerializeField]
-    private List<Enemy> Enemies = new List<Enemy>();
+    private GameObject StartLevel;
+    [SerializeField]
+    // private List<Enemy> Enemies = new List<Enemy>();
     // Start is called before the first frame update
     void Start()
     {

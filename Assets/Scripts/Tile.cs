@@ -17,6 +17,12 @@ public class Tile : MonoBehaviour
     private bool v_isEnemy = false;
     [SerializeField]
     private bool v_isPowerUp = false;
+
+    [Header("Detection")]
+    private bool isTileAround;
+    public float TileCheckAroundDistance;
+    private RaycastHit TileAroundHit;
+
     [Header("References")]
     [SerializeField]
     private GameObject r_Enemy;
@@ -28,13 +34,13 @@ public class Tile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        // CheckTilesAround();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        CheckTilesAround();
     }
 
     private void CheckEnemiesTilesAround()
@@ -60,5 +66,45 @@ public class Tile : MonoBehaviour
     public void SetPosition(TilePosition pos)
     {
         v_position = pos;
+    }
+
+    private void CheckTilesAround()
+    {
+            r_TilesAround.Clear();
+            Tile tile;
+            isTileAround = Physics.Raycast(transform.position, transform.forward, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+            Debug.DrawLine( transform.position, transform.position + transform.forward * TileCheckAroundDistance, Color.green);
+            if (isTileAround)
+            {
+                tile = TileAroundHit.collider.GetComponentInParent<Tile>();
+                if (tile != null)
+                    r_TilesAround.Add(tile);
+                Debug.Log("Tile around: ");
+            }
+            isTileAround = Physics.Raycast(transform.position, - transform.forward, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+            Debug.DrawLine( transform.position, transform.position - transform.forward * TileCheckAroundDistance, Color.green);
+            if (isTileAround)
+            {
+                tile = TileAroundHit.collider.GetComponentInParent<Tile>();
+                if (tile != null)
+                r_TilesAround.Add(tile);
+            }
+            isTileAround = Physics.Raycast(transform.position, transform.right, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+            Debug.DrawLine( transform.position, transform.position + transform.right* TileCheckAroundDistance, Color.green);
+            if (isTileAround)
+            {
+                tile = TileAroundHit.collider.GetComponentInParent<Tile>();
+                if (tile != null)
+                r_TilesAround.Add(tile);
+            }
+            isTileAround = Physics.Raycast(transform.position, - transform.right, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+            Debug.DrawLine( transform.position, transform.position - transform.right * TileCheckAroundDistance, Color.green);
+            if (isTileAround)
+            {
+                tile = TileAroundHit.collider.GetComponentInParent<Tile>();
+                if (tile != null)
+                r_TilesAround.Add(tile);
+            }
+        
     }
 }
