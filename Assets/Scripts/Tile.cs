@@ -113,4 +113,9 @@ public class Tile : MonoBehaviour
         }
         
     }
+
+    public void SetIsEnemy(bool isEnemy)
+    {
+        v_isEnemy = isEnemy;
+    }
 }
