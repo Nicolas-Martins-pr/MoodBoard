@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523e882525a2e904a9b728d09567e0b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  v_nbEnemy: 1
+  v_nbEnemy: 3
   r_LevelTileList: []
   r_EnemiesList: []
   r_TilePrefab: {fileID: 0}

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using Extensions;
 using UnityEngine;
 
@@ -60,9 +61,19 @@ public class LevelController : Singleton<LevelController>
             if(t_FirstTick)
             {
                 // Update la moitié des unites
+                int EnemiesListFirstHalf = (int)Math.Ceiling(r_EnemiesList.Count / 2f);
+                for (int i = 0; i < EnemiesListFirstHalf; i++)
+                {
+                    StartCoroutine(r_EnemiesList[i].ChoseComportement());
+                }
             }
             else
             {
+                int EnemiesListLastHalf =(int) Math.Ceiling(r_EnemiesList.Count / 2f);
+                for (int j = EnemiesListLastHalf; j < r_EnemiesList.Count; j++)
+                {
+                    StartCoroutine(r_EnemiesList[j].ChoseComportement());
+                }
                 // Update l'autre moitié des unites
             }
 
@@ -160,6 +171,8 @@ public class LevelController : Singleton<LevelController>
 
     public void SetEnemyParent(EnemyController enemy, Tile parent)
     {
+        enemy.GetComponentInParent<Tile>().SetIsEnemy(false);
         enemy.gameObject.transform.SetParent(parent.gameObject.transform);
+        parent.SetIsEnemy(true);
     }
 }

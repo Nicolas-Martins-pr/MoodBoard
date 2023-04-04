@@ -11,6 +11,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private bool v_FrontWall = false;
     private RaycastHit v_FrontWallHit;
+
+    [SerializeField]
+    private float v_WallCheckDistance = 3f;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,12 +21,33 @@ public class EnemyController : MonoBehaviour
     }
 
      void Update() {
-    Move();
+  
     }
 
-    public void ChoseComportement()
+    public IEnumerator ChoseComportement()
     {
-        CheckFrontWall();
+        if(CheckFrontWall())
+        {
+            Rotate();
+        }
+        else
+        {
+            float rand = Random.value;
+
+            if(rand < 0.70f)
+            {
+                Move();
+            }
+            else if (rand < 0.90f)
+            {
+                Rotate();
+            }
+            else
+            {
+                
+            }
+        }
+        yield return null;
         //Tir un aléatoire, si valeur <= proba Move alors récup tile;
         // Move();
         //Sinon
@@ -38,15 +62,50 @@ public class EnemyController : MonoBehaviour
         {
             StartCoroutine(DoMovement(tile));
         }
-        else return;
+        else Rotate();
         // Lui donne la tile vers laquelle il se dirige et se set en fils
         // Move forward obligatoire
 
     }
 
-    private void Rotate(float angle) // -1 pour -90 / +1 pour 90 
+    private void Rotate()
     {
-        // Rotate l'ennemi dans la direction définis
+        StartCoroutine(DoRotate());
+    }
+
+    private IEnumerator DoRotate()
+    {
+        // Determine la direction de la rotation
+        float rand = Random.value;
+        float sign = rand < 0.5f ? -1f : 1f;
+
+        // Rotation initiale du transform
+        Quaternion startRotation = transform.rotation;
+
+        // Rotation cible
+        Quaternion targetRotation = Quaternion.AngleAxis(90f * sign, Vector3.up) * startRotation;
+
+        // Durée de la rotation
+        float duration = 0.5f;
+
+        // Temps écoulé depuis le début de la rotation
+        float time = 0f;
+
+        while (time < duration)
+        {
+            // Calcul de l'interpolation de rotation
+            float t = time / duration;
+            transform.rotation = Quaternion.Lerp(startRotation, targetRotation, t);
+
+            // Attend une frame
+            yield return null;
+
+            // Mise à jour du temps écoulé
+            time += Time.deltaTime;
+        }
+
+        // Assure que la rotation est bien effectuée à la fin
+        transform.rotation = targetRotation;
     }
 
     private IEnumerator DoMovement(Tile newTile)
@@ -72,6 +131,6 @@ public class EnemyController : MonoBehaviour
     private bool CheckFrontWall()
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
-        v_FrontWall = Physics.Raycast(transform.position, transform.forward, out v_FrontWallHit, v_WallCheckDistance, LayerMask.GetMask("Wall"));
+        return  Physics.Raycast(transform.position, transform.forward, out v_FrontWallHit, v_WallCheckDistance, LayerMask.GetMask("Wall"));
     }
 }

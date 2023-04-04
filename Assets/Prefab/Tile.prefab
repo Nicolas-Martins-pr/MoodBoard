@@ -114,7 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4043960567012171827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 8531587682272669805}
   - component: {fileID: 6897542404139886876}
   - component: {fileID: 5845534295635355310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -257,7 +257,7 @@ GameObject:
   - component: {fileID: 1061416264984874907}
   - component: {fileID: 1914538550183119886}
   - component: {fileID: 2978008899871396854}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 7950835197568926250}
   - component: {fileID: 4300977181603288137}
   - component: {fileID: 6833275441693194157}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -501,11 +501,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9668c7e3198b8634ea88d136d686453a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  v_isPlayer: 0
   v_isEnemy: 0
   v_isPowerUp: 0
   TileCheckAroundDistance: 4
+  r_Player: {fileID: 0}
   r_Enemy: {fileID: 0}
-  r_PowerUp: {fileID: 0}
+  r_Upgrade: {fileID: 0}
   r_TilesAround: []
 --- !u!1 &8458782520795234024
 GameObject:
@@ -519,7 +521,7 @@ GameObject:
   - component: {fileID: 1211631981166855954}
   - component: {fileID: 4719817835662688153}
   - component: {fileID: 1105702170906293290}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
