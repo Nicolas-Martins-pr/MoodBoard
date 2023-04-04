@@ -102,4 +102,59 @@ public class LevelController : Singleton<LevelController>
     }
     // private Tile GetTileFromPosition() // trouve une tile en fonction de sa position donné par Tiles
 
+    public TilePosition GetPositionEnemy(EnemyController enemy)
+    {
+            
+        return enemy.gameObject.GetComponentInParent<Tile>().GetPosition();
+    }
+
+    public Tile CanEnemyTravelToForwardTIle(EnemyController enemy)
+    {
+        // récupération de l'orientation de l'ennemi. Recup position de la tile. Récup la tile devant l'ennemi. Regarde si la tile possède un ennemi ou une amélioration. Si non. Renvoie la tile si oui renvoi null.
+        Vector3 enemyDirection = enemy.gameObject.transform.forward;
+        TilePosition enemyPosition = GetPositionEnemy(enemy);
+        TilePosition Next_enemyPosition = TilePosition.GetNextTilePositionWithVector3(enemyDirection, enemyPosition);
+        Tile newTile =  GetTileAroundFromPosition(enemy.GetComponentInParent<Tile>(), Next_enemyPosition);
+        if(newTile != null && !newTile.IsEnemy() && !newTile.IsUpgrade())
+            return newTile;
+        else return null;
+        
+    }
+
+    public Tile GetTileAroundFromPosition(Tile tile, TilePosition tilePosition)
+    {
+        int it = 0;
+        List<Tile> TilesAroundTile = tile.GetTiles(); 
+
+        while(it < TilesAroundTile.Count)
+        {
+            if(TilePosition.CompareTilePosition( TilesAroundTile[it].GetPosition(), tilePosition))
+            {
+                return (TilesAroundTile[it]);
+            }
+            it++;
+        }
+        return null;
+    }
+       //Fonction à transférer dans le levelcontroller
+    private void CheckEnemiesTilesAround(Tile tile)
+    {
+        List<TilePosition> freeTiles = new List<TilePosition>(); 
+        List<Tile> TilesAroundTile = tile.GetTiles(); 
+        
+        foreach (Tile it_tile in TilesAroundTile)
+        {
+            if (!it_tile.IsEnemy())
+            {
+                freeTiles.Add(it_tile.GetPosition());
+            }
+        }
+    }
+
+    //Fonction à transférer dans le levelcontroller 
+
+    public void SetEnemyParent(EnemyController enemy, Tile parent)
+    {
+        enemy.gameObject.transform.SetParent(parent.gameObject.transform);
+    }
 }

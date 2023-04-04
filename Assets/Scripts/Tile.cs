@@ -6,7 +6,25 @@ public struct TilePosition
 {
     public int x;
     public int z;
+
+    
+    public TilePosition(int x, int z)
+    {
+        this.x = x;
+        this.z = z;
+    }
+
+    public static bool CompareTilePosition(TilePosition tile1, TilePosition tile2)
+    {
+        return (tile1.x == tile2.x && tile1.z == tile2.z);
+    }
+
+    public static TilePosition GetNextTilePositionWithVector3(Vector3 orientation, TilePosition position)
+    {
+        return new TilePosition((int)orientation.x + position.x, (int)orientation.z + position.z);
+    }
 }
+
 
 public class Tile : MonoBehaviour
 {
@@ -31,7 +49,7 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private GameObject r_Enemy;
     [SerializeField]
-    private GameObject r_PowerUp;
+    private GameObject r_Upgrade;
     [SerializeField]
     private List<Tile> r_TilesAround = new List<Tile>();
     
@@ -50,21 +68,18 @@ public class Tile : MonoBehaviour
         
     }
 
-    private void CheckEnemiesTilesAround()
-    {
-        List<TilePosition> freeTiles = new List<TilePosition>(); 
-        foreach (Tile tile in r_TilesAround)
-        {
-            if (!tile.IsEnemy())
-            {
-                freeTiles.Add(tile.GetPosition());
-            }
-        }
-    }
+
+ 
+    
+
 
     public bool IsEnemy()
     {
         return v_isEnemy;
+    }
+    public bool IsUpgrade()
+    {
+        return r_Upgrade;
     }
     public TilePosition GetPosition()
     {
@@ -117,5 +132,10 @@ public class Tile : MonoBehaviour
     public void SetIsEnemy(bool isEnemy)
     {
         v_isEnemy = isEnemy;
+    }
+
+    public List<Tile> GetTiles()
+    {
+        return r_TilesAround;
     }
 }
