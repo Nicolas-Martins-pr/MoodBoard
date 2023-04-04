@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class LevelController : Singleton<LevelController>
 {
+    [Header("Variables")]
+    [SerializeField]
+    private int v_nbEnemy;
+
     [Header("References")]
     [SerializeField]
     private List<Tile> r_LevelTileList;
@@ -43,7 +47,7 @@ public class LevelController : Singleton<LevelController>
             Debug.LogWarning("Aucun Tile trouvé !");
         }
 
-        SpawnXEnemies(3);
+        SpawnXEnemies(v_nbEnemy);
     }
 
     // Update is called once per frame
@@ -94,7 +98,7 @@ public class LevelController : Singleton<LevelController>
     private void SpawnEnemyInTile(Tile tile)
     {
         tile.SetIsEnemy(true);
-        Transform tileTransform = tile.gameObject.transform;
+        Transform tileTransform = tile.transform;
         Vector3 posSpawnEnemy = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
         GameObject enemy = Instantiate(r_Enemy, posSpawnEnemy, tileTransform.rotation, null);
         enemy.transform.SetParent(tileTransform);
@@ -115,6 +119,7 @@ public class LevelController : Singleton<LevelController>
         TilePosition enemyPosition = GetPositionEnemy(enemy);
         TilePosition Next_enemyPosition = TilePosition.GetNextTilePositionWithVector3(enemyDirection, enemyPosition);
         Tile newTile =  GetTileAroundFromPosition(enemy.GetComponentInParent<Tile>(), Next_enemyPosition);
+        
         if(newTile != null && !newTile.IsEnemy() && !newTile.IsUpgrade())
             return newTile;
         else return null;

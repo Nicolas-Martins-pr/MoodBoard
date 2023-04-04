@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Variables")]
+    [SerializeField]
+    private float v_MovementDuration = 0.9f;
+
+    [SerializeField]
+    private bool v_FrontWall = false;
+    private RaycastHit v_FrontWallHit;
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-
+     void Update() {
+    Move();
+    }
 
     public void ChoseComportement()
     {
@@ -44,12 +53,25 @@ public class EnemyController : MonoBehaviour
     {
         //While tant que pas arrivé à la position.
         //SetParent quand arrivé comtroller
+        float time = 0f;
+        Vector3 targetPosition = new Vector3(newTile.transform.position.x, 1.5f ,newTile.transform.position.z);
+        Transform tileTransform = this.GetComponentInParent<Tile>().transform;
+        Vector3 startPosition = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
+        
+        while(time < v_MovementDuration)
+        {
+            time += Time.deltaTime;
+            float t = Mathf.Clamp01(time / v_MovementDuration);
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            yield return null;
+        }
         LevelController.Instance.SetEnemyParent(this, newTile);
-        yield return null; 
+        transform.position =  targetPosition;
     }
 
-    private void CheckFrontWall()
+    private bool CheckFrontWall()
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
+        v_FrontWall = Physics.Raycast(transform.position, transform.forward, out v_FrontWallHit, v_WallCheckDistance, LayerMask.GetMask("Wall"));)
     }
 }
