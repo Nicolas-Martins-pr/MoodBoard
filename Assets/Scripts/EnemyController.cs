@@ -72,6 +72,6 @@ public class EnemyController : MonoBehaviour
     private bool CheckFrontWall()
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
-        v_FrontWall = Physics.Raycast(transform.position, transform.forward, out v_FrontWallHit, v_WallCheckDistance, LayerMask.GetMask("Wall"));)
+        v_FrontWall = Physics.Raycast(transform.position, transform.forward, out v_FrontWallHit, v_WallCheckDistance, LayerMask.GetMask("Wall"));
     }
 }
