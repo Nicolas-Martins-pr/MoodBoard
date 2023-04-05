@@ -12,6 +12,11 @@ public class LevelController : Singleton<LevelController>
     private int v_nbEnemy;
 
     [Header("References")]
+
+    [SerializeField]
+    private PlayerController p_Player;
+
+
     [SerializeField]
     private List<Tile> r_LevelTileList;
     [SerializeField]
@@ -35,6 +40,7 @@ public class LevelController : Singleton<LevelController>
     {
         // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
         GameObject level = GameObject.Find("Level");
+        p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         Tile[] tileArray = level.GetComponentsInChildren<Tile>();
         r_LevelTileList = new List<Tile>(tileArray);
 
@@ -91,6 +97,8 @@ public class LevelController : Singleton<LevelController>
         }
     }
 
+
+    #region EnemyControl
     private void SpawnXEnemies(int nbEnemy)
     {
         int nbSpawned = nbEnemy;
@@ -172,7 +180,40 @@ public class LevelController : Singleton<LevelController>
     public void SetEnemyParent(EnemyController enemy, Tile parent)
     {
         enemy.GetComponentInParent<Tile>().SetIsEnemy(false);
-        enemy.gameObject.transform.SetParent(parent.gameObject.transform);
+        enemy.gameObject.transform.SetParent(parent.transform);
         parent.SetIsEnemy(true);
     }
+    #endregion
+
+    #region PlayerControl
+
+    public Tile CanPlayerTravelToForwardTIle()
+    {
+        // récupération de l'orientation de l'ennemi. Recup position de la tile. Récup la tile devant l'ennemi. Regarde si la tile possède un ennemi ou une amélioration. Si non. Renvoie la tile si oui renvoi null.
+        Vector3 playerDirection = p_Player.gameObject.transform.forward;
+        TilePosition playerPosition = GetPositionPlayer();
+        TilePosition Next_playerPosition = TilePosition.GetNextTilePositionWithVector3(playerDirection, playerPosition);
+        Tile newTile =  GetTileAroundFromPosition(p_Player.GetComponentInParent<Tile>(), Next_playerPosition);
+        
+        if(newTile != null)
+            return newTile;
+        else return null;
+        
+    }
+
+    public TilePosition GetPositionPlayer()
+    {
+            
+        return p_Player.gameObject.GetComponentInParent<Tile>().GetPosition();
+    }
+
+    public void SetPlayerParent( Tile parent)
+    {
+        p_Player.GetComponentInParent<Tile>().SetIsPlayer(false);
+        p_Player.gameObject.transform.SetParent(parent.transform);
+        parent.SetIsPlayer(true);
+    }
+
+     
+    #endregion
 }

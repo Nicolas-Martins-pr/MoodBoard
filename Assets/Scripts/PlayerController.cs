@@ -1,12 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public enum MovementPlayerState
+{
+    Immobile,
+    RotateLeft,
+    RotateRight,
+    MoveForward
+}
+
+public class PlayerController : Singleton<PlayerController>
 {
     [Header("Variables")]
+
+    [SerializeField] 
+    private MovementPlayerState v_MovementPlayerState;
+
     [SerializeField]
     private float v_MovementDuration = 0.9f;
+
+    [Header("DelayMovement")]
+    [SerializeField]
+    private float d_TickRate = 1.5f; // Delay entre 2 movmement
+    private float d_Chrono =10f;
+    private bool d_FirstTick = true;
 
     [Header("Detections")]
 
@@ -17,47 +36,31 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField]
     private float d_WallCheckDistance = 3f;
+
+
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-
-    public IEnumerator ChoseComportement()
+    // Update is called once per frame
+    void Update()
     {
-        if(CheckFrontWall())
-        {
-            Rotate();
-        }
+        //Prise en compte des inputs
+        if (d_Chrono < d_TickRate )
+            d_Chrono += Time.deltaTime;
+            
         else
-        {
-            float rand = Random.value;
-
-            if(rand < 0.70f)
-            {
-                Move();
-            }
-            else if (rand < 0.90f)
-            {
-                Rotate();
-            }
-            else
-            {
-                
-            }
+        {   
+           //DoMovement selected
+        //    d_Chrono = 0f; 
         }
-        yield return null;
-        //Tir un aléatoire, si valeur <= proba Move alors récup tile;
-        // Move();
-        //Sinon
-        //Rotate();
-        //Sinon Stay();
     }
 
     private void Move()
     {
-        Tile tile = LevelController.Instance.CanEnemyTravelToForwardTIle(this);
+        Tile tile = LevelController.Instance.CanPlayerTravelToForwardTIle();
         if (tile != null)
         {
             StartCoroutine(DoMovement(tile));
@@ -68,6 +71,27 @@ public class EnemyController : MonoBehaviour
 
     }
 
+    private IEnumerator DoMovement(Tile newTile)
+    {
+        //While tant que pas arrivé à la position.
+        //SetParent quand arrivé comtroller
+        float time = 0f;
+        Vector3 targetPosition = new Vector3(newTile.transform.position.x, 1.5f ,newTile.transform.position.z);
+        Transform tileTransform = this.GetComponentInParent<Tile>().transform;
+        Vector3 startPosition = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
+        
+        while(time < v_MovementDuration)
+        {
+            time += Time.deltaTime;
+            float t = Mathf.Clamp01(time / v_MovementDuration);
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            yield return null;
+        }
+        LevelController.Instance.SetPlayerParent(newTile);
+        transform.position =  targetPosition;
+    }
+
+
     private void Rotate()
     {
         StartCoroutine(DoRotate());
@@ -76,7 +100,7 @@ public class EnemyController : MonoBehaviour
     private IEnumerator DoRotate()
     {
         // Determine la direction de la rotation
-        float rand = Random.value;
+        float rand = UnityEngine.Random.value;
         float sign = rand < 0.5f ? -1f : 1f;
 
         // Rotation initiale du transform
@@ -108,25 +132,7 @@ public class EnemyController : MonoBehaviour
         transform.rotation = targetRotation;
     }
 
-    private IEnumerator DoMovement(Tile newTile)
-    {
-        //While tant que pas arrivé à la position.
-        //SetParent quand arrivé comtroller
-        float time = 0f;
-        Vector3 targetPosition = new Vector3(newTile.transform.position.x, 1.5f ,newTile.transform.position.z);
-        Transform tileTransform = this.GetComponentInParent<Tile>().transform;
-        Vector3 startPosition = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
-        
-        while(time < v_MovementDuration)
-        {
-            time += Time.deltaTime;
-            float t = Mathf.Clamp01(time / v_MovementDuration);
-            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
-            yield return null;
-        }
-        LevelController.Instance.SetEnemyParent(this, newTile);
-        transform.position =  targetPosition;
-    }
+    
 
     private bool CheckFrontWall()
     {

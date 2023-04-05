@@ -134,6 +134,11 @@ public class Tile : MonoBehaviour
         v_isEnemy = isEnemy;
     }
 
+    public void SetIsPlayer(bool isPlayer)
+    {
+        v_isPlayer = isPlayer;
+    }
+
     public List<Tile> GetTiles()
     {
         return r_TilesAround;
