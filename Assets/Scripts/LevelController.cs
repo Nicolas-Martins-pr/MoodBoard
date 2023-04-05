@@ -125,6 +125,9 @@ public class LevelController : Singleton<LevelController>
     }
     // private Tile GetTileFromPosition() // trouve une tile en fonction de sa position donné par Tiles
 
+    //Modification possible en utilisant le Monobehaviour plutot que enemyController
+    // public TilePosition GetPositionEntity(MonoBehaviour entity)
+    
     public TilePosition GetPositionEnemy(EnemyController enemy)
     {
             
@@ -207,7 +210,7 @@ public class LevelController : Singleton<LevelController>
         return p_Player.gameObject.GetComponentInParent<Tile>().GetPosition();
     }
 
-    public void SetPlayerParent( Tile parent)
+    public void SetPlayerParent(Tile parent)
     {
         p_Player.GetComponentInParent<Tile>().SetIsPlayer(false);
         p_Player.gameObject.transform.SetParent(parent.transform);

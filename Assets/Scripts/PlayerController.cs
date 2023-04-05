@@ -13,6 +13,9 @@ public enum MovementPlayerState
 
 public class PlayerController : Singleton<PlayerController>
 {
+    [Header("Action")]
+    private bool _Action= false;
+
     [Header("Variables")]
 
     [SerializeField] 
@@ -41,12 +44,12 @@ public class PlayerController : Singleton<PlayerController>
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
+        CheckInput();
         //Prise en compte des inputs
         if (d_Chrono < d_TickRate )
             d_Chrono += Time.deltaTime;
@@ -55,6 +58,27 @@ public class PlayerController : Singleton<PlayerController>
         {   
            //DoMovement selected
         //    d_Chrono = 0f; 
+        }
+    }
+
+    private void CheckInput()
+    {
+        if (Input.GetButtonDown("RotateRight"))
+        {
+            v_MovementPlayerState = MovementPlayerState.RotateRight;
+        
+        }
+        else if (Input.GetButtonDown("RotateLeft"))
+        {
+            v_MovementPlayerState = MovementPlayerState.RotateLeft; 
+        }
+        else if (Input.GetButtonDown("Move"))
+        {
+            v_MovementPlayerState = MovementPlayerState.MoveForward;   
+        }
+        else if (Input.anyKeyDown&& !Input.GetMouseButton(0)&& !Input.GetMouseButton(1)&& !Input.GetMouseButton(2))
+        {
+            v_MovementPlayerState = MovementPlayerState.Immobile;
         }
     }
 
