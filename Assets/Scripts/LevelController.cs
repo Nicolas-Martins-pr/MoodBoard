@@ -128,17 +128,17 @@ public class LevelController : Singleton<LevelController>
     //Modification possible en utilisant le Monobehaviour plutot que enemyController
     // public TilePosition GetPositionEntity(MonoBehaviour entity)
     
-    public TilePosition GetPositionEnemy(EnemyController enemy)
+    public TilePosition GetPositionEntity(MonoBehaviour entity)
     {
             
-        return enemy.gameObject.GetComponentInParent<Tile>().GetPosition();
+        return entity.gameObject.GetComponentInParent<Tile>().GetPosition();
     }
 
     public Tile CanEnemyTravelToForwardTIle(EnemyController enemy)
     {
         // récupération de l'orientation de l'ennemi. Recup position de la tile. Récup la tile devant l'ennemi. Regarde si la tile possède un ennemi ou une amélioration. Si non. Renvoie la tile si oui renvoi null.
         Vector3 enemyDirection = enemy.gameObject.transform.forward;
-        TilePosition enemyPosition = GetPositionEnemy(enemy);
+        TilePosition enemyPosition = GetPositionEntity(enemy);
         TilePosition Next_enemyPosition = TilePosition.GetNextTilePositionWithVector3(enemyDirection, enemyPosition);
         Tile newTile =  GetTileAroundFromPosition(enemy.GetComponentInParent<Tile>(), Next_enemyPosition);
         
@@ -194,7 +194,7 @@ public class LevelController : Singleton<LevelController>
     {
         // récupération de l'orientation de l'ennemi. Recup position de la tile. Récup la tile devant l'ennemi. Regarde si la tile possède un ennemi ou une amélioration. Si non. Renvoie la tile si oui renvoi null.
         Vector3 playerDirection = p_Player.gameObject.transform.forward;
-        TilePosition playerPosition = GetPositionPlayer();
+        TilePosition playerPosition = GetPositionEntity(p_Player);
         TilePosition Next_playerPosition = TilePosition.GetNextTilePositionWithVector3(playerDirection, playerPosition);
         Tile newTile =  GetTileAroundFromPosition(p_Player.GetComponentInParent<Tile>(), Next_playerPosition);
         
@@ -202,12 +202,6 @@ public class LevelController : Singleton<LevelController>
             return newTile;
         else return null;
         
-    }
-
-    public TilePosition GetPositionPlayer()
-    {
-            
-        return p_Player.gameObject.GetComponentInParent<Tile>().GetPosition();
     }
 
     public void SetPlayerParent(Tile parent)
