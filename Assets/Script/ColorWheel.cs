@@ -3,123 +3,125 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ColorWheel : MonoBehaviour
+public class WheelRotating : MonoBehaviour
 {
-    float timeCounter = 0;
-    bool isRotatingLeft = false;
-    bool isRotatingRight = false;
-    float speed;
+    public float rotationSpeed = 30f;
+    public float rotationAmount = 45f;
 
-    int numRotating = 0;
+    private bool rotating = false;
+    private Quaternion targetRotation;
+    private float totalRotation = 0f;
+
+    private char nextRotation;
+    private bool inputProcessed = false;
 
 
-    // Start is called before the first frame update
     void Start()
     {
-        speed = 150;        
+
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A) && !isRotatingRight)
+        if (!rotating)
         {
-            isRotatingLeft = true;
+            if (Input.GetKeyDown(KeyCode.A) && !inputProcessed)
+            {
+                targetRotation = transform.rotation * Quaternion.Euler(0f, 0f, rotationAmount);
+                rotating = true;
+                totalRotation += rotationAmount;
+                inputProcessed = true;
+            }
+            if (Input.GetKeyDown(KeyCode.D) && !inputProcessed)
+            {
+                targetRotation = transform.rotation * Quaternion.Euler(0f, 0f, -rotationAmount);
+                rotating = true;
+                totalRotation -= rotationAmount;
+                inputProcessed = true;
+            }
         }
-        if (isRotatingLeft && !isRotatingRight) { 
-            rotation('L');
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
+        else if (rotating)
         {
-            isRotatingRight = true;
+            if (Input.GetKeyDown(KeyCode.A) && !inputProcessed)
+            {
+                nextRotation = 'a';
+                inputProcessed = true;
+            }
+            if (Input.GetKeyDown(KeyCode.D) && !inputProcessed)
+            {
+                nextRotation = 'd';
+                inputProcessed = true;
+            }
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            if (Quaternion.Angle(transform.rotation, targetRotation) < 0.1f)
+            {
+                rotating = false;
+
+                if (totalRotation >= 360f || totalRotation <= -360f)
+                {
+                    transform.rotation = Quaternion.identity;
+                    totalRotation = 0f;
+                }
+
+                if (nextRotation != '0')
+                {
+                    rotating = true;
+                    if (nextRotation == 'a')
+                    {
+                        targetRotation = transform.rotation * Quaternion.Euler(0f, 0f, rotationAmount);
+                        rotating = true;
+                        totalRotation += rotationAmount;
+                    }
+                    if (nextRotation == 'd')
+                    {
+                        targetRotation = transform.rotation * Quaternion.Euler(0f, 0f, -rotationAmount);
+                        rotating = true;
+                        totalRotation -= rotationAmount;
+                    }
+                    nextRotation = '0';
+                }
+            }
         }
-        if (isRotatingRight && !isRotatingLeft)
+
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
         {
-            rotation('R');
+            inputProcessed = false;
         }
-
-
-
     }
 
-        void rotation(char r)
-    {
-        Debug.Log(timeCounter);
-        if (r == 'L')
-        {
-            timeCounter += (Time.deltaTime * speed);
-        }
-        else
-        {
-            timeCounter += (Time.deltaTime * -speed);
-        }
-        
-        if (numRotating >= 45)
-        {
 
-            
-            isRotatingLeft = false;
-            isRotatingRight = false;
-            timeCounter = ((int)Math.Round(timeCounter) % 360);
-            numRotating = 0;
-        }
-        else
-        {
-            numRotating = (int)Math.Round(Math.Abs(timeCounter) % 45);
-            
-        }
-        transform.rotation = Quaternion.Euler(0, 0, timeCounter);
-        
-    }
-
-
-
-
-
-
-
-
-
-/*    void rotationLeft()
-    {
-        timeCounter += (Time.deltaTime * speed);
-        if (numRotating >= 45)
-        {
-
-            Debug.Log(timeCounter);
-            isRotatingLeft = false;
-            timeCounter = ((int)Math.Round(timeCounter) % 360);
-            numRotating = 0;
-        }
-        else
-        {
-            numRotating = (int)Math.Round(timeCounter % 45);
-            
-        }
-        transform.rotation = Quaternion.Euler(0, 0, timeCounter);
-        
-    }
-
-    void rotationRight()
-    {
-        timeCounter += (Time.deltaTime * -speed);
-        if (numRotating >= 45)
-        {
-
-            Debug.Log(timeCounter);
-            isRotatingRight = false;
-            timeCounter = ((int)Math.Round(timeCounter) % 360);
-            numRotating = 0;
-        }
-        else
-        {
-            numRotating = (int)Math.Round(Math.Abs(timeCounter) % 45);
-
-        }
-        Debug.Log(-timeCounter);
-        transform.rotation = Quaternion.Euler(0, 0, timeCounter);
-
-    }*/
 
 }
+
+/*
+// Update is called once per frame
+void Update()
+{
+
+    if (Input.GetKeyDown(KeyCode.A))
+    {
+        direction = 1;
+        isRotating = true;
+    }
+
+    if (Input.GetKeyDown(KeyCode.D))
+    {
+        direction = -1;
+        isRotating = true;
+    }
+    if (isRotating)
+    {
+        float angle = direction * speed * Time.deltaTime;
+
+        transform.Rotate(Vector3.forward, angle);
+        angleRotated += Mathf.Abs(angle);
+
+        if (angleRotated >= 45.0f)
+        {
+            isRotating = false;
+            angleRotated = 0.0f;
+        }
+    }
+}*/
