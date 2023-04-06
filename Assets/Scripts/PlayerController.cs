@@ -23,7 +23,7 @@ public class PlayerController : Singleton<PlayerController>
 
     [SerializeField]
     private float v_MovementDuration = 0.9f;
-
+    [SerializeField]
     private float v_RotationDuration = 0.5f;
 
     [Header("DelayMovement")]
