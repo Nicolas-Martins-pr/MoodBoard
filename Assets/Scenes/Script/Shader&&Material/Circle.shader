@@ -3,6 +3,7 @@ Shader "Custom/NewUnlitShader" {
         _Color("Color", Color) = (1,1,1,1)
         _Center("Center", Vector) = (0,0,0,0)
         _Radius("Radius", Range(0.0, 1.0)) = 0.5
+        _OtherMaterial("Other Material", 2D) = "white" {}
     }
         SubShader{
             Tags { "RenderType" = "Opaque" }
@@ -25,6 +26,7 @@ Shader "Custom/NewUnlitShader" {
                 float4 _Color;
                 float3 _Center;
                 float _Radius;
+                //Material _OtherMaterial;
 
                 v2f vert(appdata v) {
                     v2f o;
@@ -40,7 +42,8 @@ Shader "Custom/NewUnlitShader" {
                     if (dist < _Radius) {
                         return _Color;
                     }
-                    return fixed4(0, 0, 0, 0);
+                    //fixed4 otherColor = _OtherMaterial.GetColor("_Color");
+                    return fixed4(0,0,0,0);
                 }
                 ENDCG
             }
