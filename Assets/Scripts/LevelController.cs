@@ -170,10 +170,10 @@ public class LevelController : Singleton<LevelController>
 
     private void SpawnEnemyInTile(Tile tile)
     {
-        tile.SetIsEnemy(true);
         Transform tileTransform = tile.transform;
         Vector3 posSpawnEnemy = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
         GameObject enemy = Instantiate(r_Enemy, posSpawnEnemy, tileTransform.rotation, null);
+        tile.SetIsEnemy(true,enemy.gameObject);
         enemy.transform.SetParent(tileTransform);
         r_EnemiesList.Add(enemy.GetComponent<EnemyController>());
     }
@@ -236,9 +236,9 @@ public class LevelController : Singleton<LevelController>
 
     public void SetEnemyParent(EnemyController enemy, Tile parent)
     {
-        enemy.GetComponentInParent<Tile>().SetIsEnemy(false);
+        enemy.GetComponentInParent<Tile>().SetIsEnemy(false, enemy.gameObject);
         enemy.gameObject.transform.SetParent(parent.transform);
-        parent.SetIsEnemy(true);
+        parent.SetIsEnemy(true,enemy.gameObject);
     }
     #endregion
 
@@ -251,7 +251,10 @@ public class LevelController : Singleton<LevelController>
         TilePosition playerPosition = GetPositionEntity(p_Player);
         TilePosition Next_playerPosition = TilePosition.GetNextTilePositionWithVector3(playerDirection, playerPosition);
         Tile newTile =  GetTileAroundFromPosition(p_Player.GetComponentInParent<Tile>(), Next_playerPosition);
-        
+        if (newTile != null && newTile.IsEnemy())
+        {
+            //TODO: Déclencle le combat
+        }
         if(newTile != null)
             return newTile;
         else return null;
