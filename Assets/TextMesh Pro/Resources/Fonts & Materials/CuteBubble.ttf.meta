@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 1c29b8fe19369f542aaf3b4bbfb6677c
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Cute Bubble
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 4786e80224f7d684088579292a125d44, type: 3}
+  - {fileID: 12800000, guid: 8e5d5d7d6a11e674f9f14bcb99158585, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
