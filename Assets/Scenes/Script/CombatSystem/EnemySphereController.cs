@@ -3,36 +3,37 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemySphereController : MonoBehaviour
+public class SphereController : MonoBehaviour
 {
     private float _sphereDuration=5;
     private float _sphereTimer;
     [SerializeField]
-    private SphereController _sphereController;
+    private SphereMethod _sphereMethod;
     
-    void Start()
-    {
-        
+    public void OnEnable() { 
+        _sphereMethod = GetComponent<SphereMethod>();
         StartCoroutine(SphereTimer());      
     }
-    
+
+
+    //Gère le timer de la sphere, et fait appel au fonction de la sphere pour la faire grossir, disparaitre et réapparaitre
     private IEnumerator SphereTimer()
     {
         while (true)
         {
 
-            _sphereController.ResetScale();
+            _sphereMethod.ResetScale();
             _sphereTimer = _sphereDuration;
-            _sphereController.PlaceSphere();
+            _sphereMethod.PlaceSphere();
             while (_sphereTimer > 0)
             {
-                if (_sphereController.isEnabled == false)
+                if (_sphereMethod.isEnabled == false)
                     break;
                 _sphereTimer--;
-                _sphereController.ScaleSphere();
+                _sphereMethod.ScaleSphere();
                 yield return new WaitForSeconds(1);
             }
-            _sphereController.DisableSphere();
+            _sphereMethod.DisableSphere();
             yield return new WaitForSeconds(2);
         }
         

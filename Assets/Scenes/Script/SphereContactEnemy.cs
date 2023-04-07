@@ -5,12 +5,14 @@ using UnityEngine;
 public class SphereContactEnemy : MonoBehaviour
 {
     [SerializeField]
-    private SphereController _sphereController;
+    private SphereMethod _sphereMethod;
+
+    //Une mécompréhension
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            _sphereController.DisableSphere();
+            _sphereMethod.DisableSphere();
             //Appliquer des effets?
         }
     }

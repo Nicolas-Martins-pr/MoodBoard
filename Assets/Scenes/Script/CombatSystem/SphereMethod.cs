@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SphereController : MonoBehaviour
+public class SphereMethod : MonoBehaviour
 {
     [SerializeField]
     private List<Material> _materials;
@@ -23,6 +23,12 @@ public class SphereController : MonoBehaviour
     private Camera _camera;
 
     private Collider collid;
+
+    public void Start()
+    {
+        _raycastSphere = GetComponent<RaycastSphere>();
+    }
+    //Gère la position de la sphere, et la fait apparaitre
     public void PlaceSphere()
     {
         _sphere.GetComponent<Renderer>().material = _materials[Random.Range(0, _materials.Count)];
@@ -38,10 +44,10 @@ public class SphereController : MonoBehaviour
             _sphere.transform.position = new Vector3(_randomPos.x, _randomPos.y, _randomPos.z - distanceToTarget / 10);
             _sphere.gameObject.SetActive(true);
             isEnabled = true;
-
         }
         
     }
+    //Les noms parlent d'eux meme 
     public void DisableSphere()
     {
         _sphere.gameObject.SetActive(false);
@@ -55,11 +61,11 @@ public class SphereController : MonoBehaviour
     {
         _sphere.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
     }
+    //Une mécompréhension
     public IEnumerator LaunchSphere()
     {
         while (isEnabled)
         {
-            Debug.Log("Bonjour je suis olivier de chez carglass");
             _sphere.transform.position = Vector3.Lerp(_sphere.transform.position, new Vector3(_sphere.transform.position.x, _sphere.transform.position.y, _randomPos.z), 0.05f);
             yield return null;
         }

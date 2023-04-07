@@ -15,8 +15,6 @@ public class RaycastSphere : MonoBehaviour
     [SerializeField]
     private List<GameObject> potentialTargets = new List<GameObject>();
 
-
-
     public List<GameObject> GetTarget()
     {
         potentialTargets.Clear();

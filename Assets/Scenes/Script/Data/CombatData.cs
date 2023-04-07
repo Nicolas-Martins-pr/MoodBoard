@@ -9,4 +9,5 @@ public class CombatData : ScriptableObject
     public float timerIncreaseBlackness;
     public float badAimValue;
     public float niceAimValue;
+
 }
