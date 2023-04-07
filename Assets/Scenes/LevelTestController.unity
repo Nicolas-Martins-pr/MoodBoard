@@ -629,9 +629,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1675864430482096552, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852971590724980501, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
+      propertyPath: m_DrawHalo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3852971590724980501, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
+      propertyPath: m_CookieSize
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5798125206677771549, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
       propertyPath: TileCheckAroundDistance
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6781745255575606856, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
+      propertyPath: m_DrawHalo
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6781745255575606856, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
+      propertyPath: m_CookieSize
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7386663628397952264, guid: fa2df2be727c39c4090cda7dd7b29490, type: 3}
       propertyPath: m_Name
