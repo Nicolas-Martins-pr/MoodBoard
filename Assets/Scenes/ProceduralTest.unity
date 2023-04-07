@@ -164,13 +164,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   v_NbRooms: 0
   v_NbCorridorsMax: 2
+  v_LevelSizeMax: 12
   v_StartPosition: {x: 0, y: 0, z: 0}
   _ItHeadStructure: 0
   _Level: []
   _LevelBlocs: []
   _LevelBlocPos: []
   r_Start: {fileID: 11400000, guid: 09e14a4da742d204180c057137c29b23, type: 2}
-  r_End: {fileID: 0}
+  r_End: {fileID: 11400000, guid: 84c7fdfb0a5539947aaa695fd8bdcb42, type: 2}
   r_Connectors:
   - {fileID: 11400000, guid: efa507f921647634daf20397cba07857, type: 2}
   - {fileID: 11400000, guid: 03778cfc06201544ead1bd879e0ba6db, type: 2}
@@ -180,6 +181,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b451bbca5aee66f47b0b672acc037689, type: 2}
   - {fileID: 11400000, guid: 09e14a4da742d204180c057137c29b23, type: 2}
   - {fileID: 11400000, guid: 9ba4a7395809fe149887b55a9b0d18a5, type: 2}
+  - {fileID: 11400000, guid: 2c8183fd1d5e0384aaee6ab89ff84375, type: 2}
 --- !u!4 &130067019
 Transform:
   m_ObjectHideFlags: 0

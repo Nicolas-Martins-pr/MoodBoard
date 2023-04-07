@@ -21,7 +21,8 @@ public class ProceduralLevelBuilder : MonoBehaviour
     [SerializeField]
     private float v_NbCorridorsMax= 2;
 
-    
+    [SerializeField]
+    private int v_LevelSizeMax= 12;
 
  
     private ProceduralLevelBuilderEnum v_State = ProceduralLevelBuilderEnum.Room;
@@ -63,7 +64,7 @@ public class ProceduralLevelBuilder : MonoBehaviour
     private LevelBloc r_Start;
 
     [SerializeField]
-    private GameObject r_End;
+    private LevelBloc r_End;
 
     [SerializeField]
     private List<LevelBloc> r_Connectors;
@@ -91,8 +92,8 @@ public class ProceduralLevelBuilder : MonoBehaviour
     {
         //On trouve une sortie du cube. On compare la position de la sortie au centre pour savoir la direction du prochain bloc puis on le pose et on enchaine.
         GameObject ExitActualBloc = GetAnExit(_ItHeadStructure);
-        if(_LevelBlocs.Count == 10) return;
-        if (ExitActualBloc != null)
+        if(_LevelBlocs.Count == v_LevelSizeMax) CreateFinalZones();
+        else if (ExitActualBloc != null)
         {
             //Création new Bloc
             ChooseNewBloc();
@@ -238,6 +239,33 @@ public class ProceduralLevelBuilder : MonoBehaviour
             it++;
         }
         return false;
+    }
+
+    private void CreateFinalZones()
+    {
+        int itFarestPos = 0;
+        float distance = 0;
+        float distanceTemp = 0;
+        for (int i = 0; i < _LevelBlocPos.Count; i++)
+        {
+            distanceTemp = Vector3.Distance(v_StartPosition, _LevelBlocPos[i]);
+            if (distance < distanceTemp)
+            {
+                distance = distanceTemp;
+                itFarestPos = i;
+            }
+        }
+        GameObject ExitActualBloc= GetAnExit(itFarestPos);
+        if (ExitActualBloc != null)
+        {
+        CreateNewBloc(_NewPos,_directionNewPos, r_End);
+        }
+        // else
+        // {
+        //     _directionNewPos = GetDirectionNewBloc(_LevelBlocs[itFarestPos].Enter.transform.position,_LevelBlocPos[itFarestPos]);
+        //     _NewPos =GetPositionNewBloc(_LevelBlocs[itFarestPos].Enter.transform.position, _directionNewPos);
+        // }
+
     }
 
 }
