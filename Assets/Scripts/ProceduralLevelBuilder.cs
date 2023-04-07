@@ -75,6 +75,9 @@ public class ProceduralLevelBuilder : MonoBehaviour
     [SerializeField]
     private List<LevelBloc> r_Rooms;
 
+    [SerializeField]
+    private GameObject r_Player;
+
 
 
     // // Start is called before the first frame update
@@ -87,6 +90,10 @@ public class ProceduralLevelBuilder : MonoBehaviour
         _LevelBlocs.Add(r_Start);
         _Level.Add(r_Start.MyGO);
         _LevelBlocPos.Add(v_StartPosition);
+        //
+        GameObject player = Instantiate(r_Player,new Vector3(r_Start.Enter.transform.position.x, 1.5f, r_Start.Enter.transform.position.z), Quaternion.identity);
+        player.transform.SetParent(r_Start.Enter.transform);
+        
         //
         BuildLevel();
     }
