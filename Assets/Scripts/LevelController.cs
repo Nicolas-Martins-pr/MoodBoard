@@ -76,7 +76,6 @@ public class LevelController : Singleton<LevelController>
         {
         // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
         GameObject level = GameObject.Find("Level");
-        Debug.Log(level.transform.position);
         p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
 
@@ -94,14 +93,14 @@ public class LevelController : Singleton<LevelController>
         // r_LevelTileList = new List<Tile>(tileArray);
 
         // Vérifier si les scripts Tile ont été récupérés
-        if (r_LevelTileList.Count > 0)
-        {
-            Debug.Log("Nombre de Tile récupérés : " + r_LevelTileList.Count);
-        }
-        else
-        {
-            Debug.LogWarning("Aucun Tile trouvé !");
-        }
+        // if (r_LevelTileList.Count > 0)
+        // {
+        //     Debug.Log("Nombre de Tile récupérés : " + r_LevelTileList.Count);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Aucun Tile trouvé !");
+        // }
 
         SpawnXEnemies(v_nbEnemy);
         v_LevelGenerated = true;

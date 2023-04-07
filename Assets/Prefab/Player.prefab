@@ -216,6 +216,6 @@ MonoBehaviour:
   v_MovementPlayerState: 0
   v_MovementDuration: 0.9
   v_RotationDuration: 0.5
-  d_TickRate: 1.5
+  d_TickRate: 0.7
   d_FrontWall: 0
   d_WallCheckDistance: 3

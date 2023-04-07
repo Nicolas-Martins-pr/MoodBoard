@@ -146,7 +146,6 @@ public class PlayerController : Singleton<PlayerController>
         Vector3 targetPosition = new Vector3(newTile.transform.position.x, 1.5f ,newTile.transform.position.z);
         Transform tileTransform = this.GetComponentInParent<Tile>().transform;
         Vector3 startPosition = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
-        
         while(time < v_MovementDuration)
         {
             time += Time.deltaTime;
@@ -200,6 +199,6 @@ public class PlayerController : Singleton<PlayerController>
     private bool CheckFrontWall()
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
-        return  Physics.Raycast(transform.position, transform.forward, out d_FrontWallHit, d_WallCheckDistance, LayerMask.GetMask("Wall"));
+        return  Physics.Raycast(transform.position, transform.forward, out d_FrontWallHit, d_WallCheckDistance, LayerMask.GetMask("Wall"));     
     }
 }
