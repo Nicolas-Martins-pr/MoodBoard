@@ -3,14 +3,23 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - BlocEnter
+  - BlocExit
+  - BlocUpgrade
+  - Boss
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Couleur
   - Water
   - UI
+  - Tile
+  - Wall
+  - WallLimiter
+  - WallDetector
+  - Enemy
   - 
   - 
   - 

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1191fe132f5f63440ad263bc9430bda4, type: 3}
+  m_Name: LevelBloc
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 5001111465413513720, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+  Enter: {fileID: 6169811695526851592, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+  Exits:
+  - {fileID: 5611580556004825803, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+  - {fileID: 5534019996996514342, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+  - {fileID: 554736725810984525, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+  PowerUPZone: {fileID: 3047609299214336197, guid: 8a1005b7136133046ad4535207d40255, type: 3}
