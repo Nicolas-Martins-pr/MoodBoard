@@ -21,7 +21,7 @@ public struct TilePosition
 
     public static TilePosition GetNextTilePositionWithVector3(Vector3 orientation, TilePosition position)
     {
-        return new TilePosition((int)orientation.x + position.x, (int)orientation.z + position.z);
+        return new TilePosition( Mathf.RoundToInt(orientation.x) + position.x,  Mathf.RoundToInt(orientation.z) + position.z);
     }
 }
 
@@ -153,9 +153,18 @@ public class Tile : MonoBehaviour
         
     }
 
-    public void SetIsEnemy(bool isEnemy)
+    public void SetIsEnemy(bool isEnemy, GameObject enemy)
     {
         v_isEnemy = isEnemy;
+        if (isEnemy)
+        {
+            r_Enemy = enemy;
+        }
+        else
+        {
+            r_Enemy = null;
+        }
+       
     }
 
     public void SetIsPlayer(bool isPlayer)
