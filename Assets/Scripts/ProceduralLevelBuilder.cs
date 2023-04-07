@@ -61,6 +61,9 @@ public class ProceduralLevelBuilder : MonoBehaviour
     [Header("références")]
 
     [SerializeField]
+    private GameObject _LevelContainer;
+
+    [SerializeField]
     private LevelBloc r_Start;
 
     [SerializeField]
@@ -74,18 +77,30 @@ public class ProceduralLevelBuilder : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
+    // // Start is called before the first frame update
     void Start()
     {
 
         //Pose du premier bloc
         r_Start.InstancePrefab(v_StartPosition);
+        r_Start.MyGO.transform.SetParent(_LevelContainer.transform);
         _LevelBlocs.Add(r_Start);
         _Level.Add(r_Start.MyGO);
         _LevelBlocPos.Add(v_StartPosition);
         //
         BuildLevel();
     }
+    // private void Awake() {
+    //     //Pose du premier bloc
+    //     r_Start.InstancePrefab(v_StartPosition);
+    //     r_Start.MyGO.transform.SetParent(_LevelContainer.transform);
+    //     _LevelBlocs.Add(r_Start);
+    //     _Level.Add(r_Start.MyGO);
+    //     _LevelBlocPos.Add(v_StartPosition);
+    //     //
+    //     BuildLevel();
+    
+    // }
 
   
     private void BuildLevel()
@@ -114,7 +129,7 @@ public class ProceduralLevelBuilder : MonoBehaviour
         LevelBloc newBloc = ScriptableObject.Instantiate(bloc) as LevelBloc;
         //
         newBloc.InstancePrefab(position);
-
+        newBloc.MyGO.transform.SetParent(_LevelContainer.transform);
         float angle = Vector3.SignedAngle(direction, GetDirectionNewBloc(position,newBloc.Enter.transform.position),Vector3.up);
         newBloc.MyGO.transform.Rotate(new Vector3(0f,- angle,0f));
 
@@ -269,7 +284,26 @@ public class ProceduralLevelBuilder : MonoBehaviour
         //     _directionNewPos = GetDirectionNewBloc(_LevelBlocs[itFarestPos].Enter.transform.position,_LevelBlocPos[itFarestPos]);
         //     _NewPos =GetPositionNewBloc(_LevelBlocs[itFarestPos].Enter.transform.position, _directionNewPos);
         // }
-
+        // PutAllTilesInLevelContainer();
     }
+
+    // private void PutAllTilesInLevelContainer()
+    // {
+    //     // List<Transform> childTransforms = new List<Transform>();
+    //     int childCount = _LevelContainer.transform.childCount;
+    //     for (int i = 0; i < childCount; i++)
+    //     {
+    //         Transform childTransform = _LevelContainer.transform.GetChild(0);
+    //         // childTransforms.Add(childTransform);
+    //         int childIndex = childTransform.transform.childCount;
+    //         for (int j = 0; j < childIndex; j++)
+    //         {
+    //             Transform childTileTransform = childTransform.transform.GetChild(j);
+    //             childTileTransform.SetParent(_LevelContainer.transform);
+    //         }
+    //         Destroy(childTransform.gameObject);
+    //     }
+
+    // }
 
 }

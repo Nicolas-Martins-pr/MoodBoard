@@ -11,6 +11,8 @@ public class LevelController : Singleton<LevelController>
     [SerializeField]
     private int v_nbEnemy;
 
+    private bool v_LevelGenerated = false;
+
     [Header("References")]
 
     [SerializeField]
@@ -18,7 +20,7 @@ public class LevelController : Singleton<LevelController>
 
 
     [SerializeField]
-    private List<Tile> r_LevelTileList;
+    private List<Tile> r_LevelTileList = new List<Tile>();
     [SerializeField]
     private List<EnemyController> r_EnemiesList = new List<EnemyController>();
     [SerializeField]
@@ -36,13 +38,60 @@ public class LevelController : Singleton<LevelController>
     
     // private List<Enemy> Enemies = new List<Enemy>();
     // Start is called before the first frame update
-    void Start()
-    {
+    // void Start()
+    // {
+    //     // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
+    //     GameObject level = GameObject.Find("Level");
+    //     p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+
+    //       int childCount = level.transform.childCount;
+    //     for (int i = 0; i < childCount; i++)
+    //     {
+    //         Transform childTransform = level.transform.GetChild(i);
+    //         Tile[] tileArray =  childTransform.GetComponentsInChildren<Tile>();
+    //         r_LevelTileList.AddRange(tileArray);
+    //     }
+
+
+
+    //     // Tile[] tileArray = level.GetComponentsInChildren<Tile>();
+    //     // r_LevelTileList = new List<Tile>(tileArray);
+
+    //     // Vérifier si les scripts Tile ont été récupérés
+    //     if (r_LevelTileList.Count > 0)
+    //     {
+    //         Debug.Log("Nombre de Tile récupérés : " + r_LevelTileList.Count);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("Aucun Tile trouvé !");
+    //     }
+
+    //     SpawnXEnemies(v_nbEnemy);
+    // }
+
+    private void LateUpdate() {
+        if (!v_LevelGenerated)
+        {
         // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
         GameObject level = GameObject.Find("Level");
+        Debug.Log(level.transform.position);
         p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        Tile[] tileArray = level.GetComponentsInChildren<Tile>();
-        r_LevelTileList = new List<Tile>(tileArray);
+
+
+          int childCount = level.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            Transform childTransform = level.transform.GetChild(i);
+            Tile[] tileArray =  childTransform.GetComponentsInChildren<Tile>();
+            r_LevelTileList.AddRange(tileArray);
+        }
+
+
+
+        // Tile[] tileArray = level.GetComponentsInChildren<Tile>();
+        // r_LevelTileList = new List<Tile>(tileArray);
 
         // Vérifier si les scripts Tile ont été récupérés
         if (r_LevelTileList.Count > 0)
@@ -55,36 +104,42 @@ public class LevelController : Singleton<LevelController>
         }
 
         SpawnXEnemies(v_nbEnemy);
+        v_LevelGenerated = true;
+        }
     }
-
     // Update is called once per frame
     void Update()
     {
-        if (t_Chrono < t_TickRate )
-            t_Chrono += Time.deltaTime;
-        else
-        {   
-            if(t_FirstTick)
-            {
-                // Update la moitié des unites
-                int EnemiesListFirstHalf = (int)Math.Ceiling(r_EnemiesList.Count / 2f);
-                for (int i = 0; i < EnemiesListFirstHalf; i++)
-                {
-                    StartCoroutine(r_EnemiesList[i].ChoseComportement());
-                }
-            }
+        if (v_LevelGenerated)
+        {
+            
+            
+            if (t_Chrono < t_TickRate )
+                t_Chrono += Time.deltaTime;
             else
-            {
-                int EnemiesListLastHalf =(int) Math.Ceiling(r_EnemiesList.Count / 2f);
-                for (int j = EnemiesListLastHalf; j < r_EnemiesList.Count; j++)
+            {   
+                if(t_FirstTick)
                 {
-                    StartCoroutine(r_EnemiesList[j].ChoseComportement());
+                    // Update la moitié des unites
+                    int EnemiesListFirstHalf = (int)Math.Ceiling(r_EnemiesList.Count / 2f);
+                    for (int i = 0; i < EnemiesListFirstHalf; i++)
+                    {
+                        StartCoroutine(r_EnemiesList[i].ChoseComportement());
+                    }
                 }
-                // Update l'autre moitié des unites
-            }
+                else
+                {
+                    int EnemiesListLastHalf =(int) Math.Ceiling(r_EnemiesList.Count / 2f);
+                    for (int j = EnemiesListLastHalf; j < r_EnemiesList.Count; j++)
+                    {
+                        StartCoroutine(r_EnemiesList[j].ChoseComportement());
+                    }
+                    // Update l'autre moitié des unites
+                }
 
-            t_Chrono = 0f;    
-            t_FirstTick = !t_FirstTick;
+                t_Chrono = 0f;    
+                t_FirstTick = !t_FirstTick;
+            }
         }
     }
 

@@ -192,7 +192,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3047609299214336197, guid: 8a1005b7136133046ad4535207d40255, type: 3}
       propertyPath: m_TagString
-      value: Untagged
+      value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 3293030734864814633, guid: 8a1005b7136133046ad4535207d40255, type: 3}
       propertyPath: m_RootOrder
