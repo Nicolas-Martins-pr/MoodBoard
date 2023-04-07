@@ -251,15 +251,19 @@ public class ProceduralLevelBuilder : MonoBehaviour
             distanceTemp = Vector3.Distance(v_StartPosition, _LevelBlocPos[i]);
             if (distance < distanceTemp)
             {
-                distance = distanceTemp;
-                itFarestPos = i;
+                
+                GameObject ExitActualBloc= GetAnExit(i);
+                if (ExitActualBloc != null)
+                {
+                    distance = distanceTemp;
+                    itFarestPos = i;
+                }
             }
         }
-        GameObject ExitActualBloc= GetAnExit(itFarestPos);
-        if (ExitActualBloc != null)
-        {
+        
+        
         CreateNewBloc(_NewPos,_directionNewPos, r_End);
-        }
+        
         // else
         // {
         //     _directionNewPos = GetDirectionNewBloc(_LevelBlocs[itFarestPos].Enter.transform.position,_LevelBlocPos[itFarestPos]);

@@ -39,7 +39,6 @@ public class LevelBloc : ScriptableObject {
         Transform[] children = MyGO.GetComponentsInChildren<Transform>(true);
         foreach (Transform child in children)
         {
-            Debug.Log(child.name);
             if (child.gameObject.tag == "BlocExit")
             {
                 Exits.Add(child.gameObject);
