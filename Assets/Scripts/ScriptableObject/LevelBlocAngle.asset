@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1191fe132f5f63440ad263bc9430bda4, type: 3}
+  m_Name: LevelBlocAngle
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 6987456599183122901, guid: 7c410affa289c5949a2708639dbd87d3, type: 3}
+  Enter: {fileID: 8726576113665059411, guid: 7c410affa289c5949a2708639dbd87d3, type: 3}
+  Exits:
+  - {fileID: 3758229449980430856, guid: 7c410affa289c5949a2708639dbd87d3, type: 3}
+  PowerUPZone: {fileID: 5610486135703018591, guid: 7c410affa289c5949a2708639dbd87d3, type: 3}

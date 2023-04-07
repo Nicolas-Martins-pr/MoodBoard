@@ -42,6 +42,8 @@ public class Tile : MonoBehaviour
     private bool isTileAround;
     public float TileCheckAroundDistance;
     private RaycastHit TileAroundHit;
+    private RaycastHit WallAroundHit;
+
 
     [Header("References")]
     [SerializeField]
@@ -92,6 +94,8 @@ public class Tile : MonoBehaviour
 
     private void CheckTilesAround()
     {
+        Vector3 WallCheckPosition = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
+
         r_TilesAround.Clear();
         Tile tile;
         isTileAround = Physics.Raycast(transform.position, transform.forward, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
@@ -102,6 +106,11 @@ public class Tile : MonoBehaviour
             if (tile != null)
                 r_TilesAround.Add(tile);
         }
+        else
+        {
+            ActivateWall(WallCheckPosition,transform.forward);
+            
+        }
         isTileAround = Physics.Raycast(transform.position, - transform.forward, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
         Debug.DrawLine( transform.position, transform.position - transform.forward * TileCheckAroundDistance, Color.green);
         if (isTileAround)
@@ -109,6 +118,11 @@ public class Tile : MonoBehaviour
             tile = TileAroundHit.collider.GetComponentInParent<Tile>();
             if (tile != null)
             r_TilesAround.Add(tile);
+        }
+        else
+        {
+            ActivateWall(WallCheckPosition,- transform.forward);
+            
         }
         isTileAround = Physics.Raycast(transform.position, transform.right, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
         Debug.DrawLine( transform.position, transform.position + transform.right* TileCheckAroundDistance, Color.green);
@@ -118,6 +132,11 @@ public class Tile : MonoBehaviour
             if (tile != null)
             r_TilesAround.Add(tile);
         }
+        else
+        {
+            ActivateWall(WallCheckPosition,transform.right);
+            
+        }
         isTileAround = Physics.Raycast(transform.position, - transform.right, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
         Debug.DrawLine( transform.position, transform.position - transform.right * TileCheckAroundDistance, Color.green);
         if (isTileAround)
@@ -125,6 +144,11 @@ public class Tile : MonoBehaviour
             tile = TileAroundHit.collider.GetComponentInParent<Tile>();
             if (tile != null)
             r_TilesAround.Add(tile);
+        }
+        else
+        {
+            ActivateWall(WallCheckPosition,- transform.right);
+            
         }
         
     }
@@ -142,5 +166,60 @@ public class Tile : MonoBehaviour
     public List<Tile> GetTiles()
     {
         return r_TilesAround;
+    }
+
+    public void ActivateWall(Vector3 WallCheckPosition, Vector3 Direction)
+    {
+            Physics.Raycast(WallCheckPosition, Direction, out WallAroundHit, 3, LayerMask.GetMask("WallDetector"));   
+            
+            if (WallAroundHit.collider != null)
+            {
+                        
+                        WallAroundHit.collider.transform.GetChild(0).gameObject.SetActive(true);
+            }
+    }
+
+    public Vector3 GetOrientationExit()
+    {
+        Tile tile;
+        isTileAround = Physics.Raycast(transform.position, transform.forward, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+        if (isTileAround)
+        {
+            TilePosition positionTile = TileAroundHit.collider.transform.gameObject.GetComponent<Tile>().GetPosition();
+            Vector3 direction = new Vector3 (positionTile.x - v_position.x, 0,positionTile.z - v_position.z);
+
+            return -1*direction;
+        }
+        
+        isTileAround = Physics.Raycast(transform.position, - transform.forward, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+        if (isTileAround)
+        {
+            TilePosition positionTile = TileAroundHit.collider.transform.gameObject.GetComponent<Tile>().GetPosition();
+            Vector3 direction = new Vector3 (positionTile.x - v_position.x, 0,positionTile.z - v_position.z);
+
+            return -1*direction;
+        }
+
+        isTileAround = Physics.Raycast(transform.position, transform.right, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+
+        if (isTileAround)
+        {
+            TilePosition positionTile = TileAroundHit.collider.transform.gameObject.GetComponent<Tile>().GetPosition();
+            Vector3 direction = new Vector3 (positionTile.x - v_position.x, 0,positionTile.z - v_position.z);
+
+            return -1*direction;
+        }
+
+        isTileAround = Physics.Raycast(transform.position, - transform.right, out TileAroundHit, TileCheckAroundDistance, LayerMask.GetMask("Tile"));
+       
+        if (isTileAround)
+        {
+            TilePosition positionTile = TileAroundHit.collider.transform.gameObject.GetComponent<Tile>().GetPosition();
+            Vector3 direction = new Vector3 (positionTile.x - v_position.x, 0,positionTile.z - v_position.z);
+
+            return -1*direction;
+        }
+
+        return Vector3.zero;
     }
 }

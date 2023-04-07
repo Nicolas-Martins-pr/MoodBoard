@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1191fe132f5f63440ad263bc9430bda4, type: 3}
+  m_Name: LevelBlocBTform
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 4568417780891125852, guid: 2ab65fb597407754f8824d5b6270902b, type: 3}
+  Enter: {fileID: 6864223970379856462, guid: 2ab65fb597407754f8824d5b6270902b, type: 3}
+  Exits:
+  - {fileID: 6593633086178451439, guid: 2ab65fb597407754f8824d5b6270902b, type: 3}
+  - {fileID: 2417866502126987486, guid: 2ab65fb597407754f8824d5b6270902b, type: 3}
+  - {fileID: 4139166171078917861, guid: 2ab65fb597407754f8824d5b6270902b, type: 3}
+  PowerUPZone: {fileID: 280605070935640273, guid: 2ab65fb597407754f8824d5b6270902b, type: 3}

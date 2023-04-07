@@ -18,9 +18,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     private float d_WallCheckDistance = 3f;
     // Start is called before the first frame update
+
+    private LayerMask d_Mask;
     void Start()
     {
-        
+        d_Mask = LayerMask.GetMask("Wall") + LayerMask.GetMask("WallLimiter");
     }
 
 
@@ -131,6 +133,6 @@ public class EnemyController : MonoBehaviour
     private bool CheckFrontWall()
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
-        return  Physics.Raycast(transform.position, transform.forward, out d_FrontWallHit, d_WallCheckDistance, LayerMask.GetMask("Wall"));
+        return  Physics.Raycast(transform.position, transform.forward, out d_FrontWallHit, d_WallCheckDistance, d_Mask);
     }
 }
