@@ -22,8 +22,15 @@ public class CombatSystem : MonoBehaviour
     private SphereMethod _sphereMethod;
     [SerializeField]
     private Amelioration _amelioration;
-    [SerializeField]
+
+    
     private WheelRotating _colorWheel;
+
+    [SerializeField]
+    private GameObject _enemy;
+    private GameObject _body;
+    private GameObject _head;
+    
 
     private int _niceAim = 0;
     private int _badAim = 0;
@@ -59,6 +66,7 @@ public class CombatSystem : MonoBehaviour
     }
     public void OnEnable()
     {
+       // SetEnemy(_enemy);
         //Verifie la présence d'amélioration et les appliquent
         if (_amelioration != null) { 
             if (_amelioration.hasBadAimAnnulator == true)
@@ -140,7 +148,24 @@ public class CombatSystem : MonoBehaviour
        /* Debug.Log("Total color" + _totalColor);
         Debug.Log("Total black color" + _totalBlackColor);       */ 
         _totalBlackColor = _badAim * _badAimValue + ((_timerDuration - (_timeRemaining+_timerBonus)) * _timeIncreaseBlackness);
-        _totalColor= _niceAim * _niceAimValue;
+       
+        //Ici pour changer la couleur du material
+        
+     /*   if (_head != null && _body != null)
+        {
+            Debug.Log("Mon 4x4");
+           Color colores = _head.GetComponent<MeshRenderer>().material.color;
+            _head.GetComponent<MeshRenderer>().material.color = colores* (100-_totalBlackColor);
+            Color colores2 = _body.GetComponent<SkinnedMeshRenderer>().material.color;
+            _body.GetComponent<SkinnedMeshRenderer>().material.color = colores * (100-_totalBlackColor);
+
+
+
+            _head.GetComponent<MeshRenderer>().material.SetFloat("_EmissionColor", _totalBlackColor);
+            _body.GetComponent<SkinnedMeshRenderer>().material.SetFloat("_EmissionColor", _totalBlackColor);*//*
+            
+        }*/
+        _totalColor = _niceAim * _niceAimValue;
         _score = _totalColor + _totalBlackColor;
         if (_score >= 100 )
             EndCombat();
@@ -151,15 +176,32 @@ public class CombatSystem : MonoBehaviour
     //Verifie le score et termine le combat
     private void EndCombat()
     {
-   /*     Debug.Log("Combat End");
+        Debug.Log("Combat End");
         Debug.Log("Nice Aim : " + _niceAim);
         Debug.Log("Bad Aim : " + _badAim);
-        Debug.Log("Score : " + _score);*/
-/*        if (_totalBlackColor > _totalColor) 
+        Debug.Log("Score : " + _score);
+        if (_totalBlackColor > _totalColor)
             Debug.Log("You lose");
         else
             Debug.Log("You win");
-       */
-        //gameObject.SetActive(false);
+        
+        //A regarder
+        _sphereMethod.DisableSphere();
+       // _enemy.gameObject.SetActive(false);
+        gameObject.SetActive(false);
+    }
+    public void SetEnemy(GameObject enemy)
+    {
+        _enemy = enemy;
+       
+    }
+    public GameObject GetEnemy()
+    {
+        return _enemy;
+    }
+    public void SetColorWheel(WheelRotating colorWheel)
+    {
+        _colorWheel = colorWheel;
     }
 }
+

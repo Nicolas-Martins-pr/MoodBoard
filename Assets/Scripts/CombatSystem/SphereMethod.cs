@@ -13,7 +13,8 @@ public class SphereMethod : MonoBehaviour
     private RaycastSphere _raycastSphere;
     [SerializeField]
     private List<GameObject> _contact;
-
+    [SerializeField]
+    private float _distanceDivid = 4f;
     private Vector3 _randomPos;
 
     public bool isEnabled = false;
@@ -34,14 +35,16 @@ public class SphereMethod : MonoBehaviour
         _sphere.GetComponent<Renderer>().material = _materials[Random.Range(0, _materials.Count)];
         _contact = _raycastSphere.GetTarget();
               
-        if (_contact.Count > 0)
+        if (_contact!=null && _contact.Count > 0)
         {
             int random = Random.Range(0, _contact.Count);
             float distanceToTarget = Vector3.Distance(_contact[random].transform.position, _camera.transform.position);
             collid = _contact[random].gameObject.GetComponent<Collider>();
-            _randomPos = collid.bounds.center + Random.insideUnitSphere * collid.bounds.extents.magnitude;
+            _randomPos = collid.bounds.center + Random.insideUnitSphere*0.5f * collid.bounds.extents.magnitude;
             _randomPos =  collid.ClosestPoint(_randomPos);
-            _sphere.transform.position = new Vector3(_randomPos.x, _randomPos.y, _randomPos.z - distanceToTarget / 10);
+            _sphere.transform.position = _randomPos + collid.transform.forward * distanceToTarget / _distanceDivid;
+            Debug.Log(_randomPos);
+            Debug.Log(collid.bounds.center);
             _sphere.gameObject.SetActive(true);
             isEnabled = true;
         }

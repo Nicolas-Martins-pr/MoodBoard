@@ -49,7 +49,7 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private GameObject r_Player;
     [SerializeField]
-    private GameObject r_Enemy;
+    public GameObject r_Enemy;
     [SerializeField]
     private GameObject r_Upgrade;
     [SerializeField]

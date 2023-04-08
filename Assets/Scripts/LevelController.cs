@@ -4,12 +4,14 @@ using System.Linq;
 using System;
 using Extensions;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class LevelController : Singleton<LevelController>
 {
     [Header("Variables")]
     [SerializeField]
     private int v_nbEnemy;
+    private bool _isInCombat = false;
 
     private bool v_LevelGenerated = false;
 
@@ -28,14 +30,20 @@ public class LevelController : Singleton<LevelController>
     [SerializeField]
     private GameObject r_StartLevel;
     [SerializeField]
-    private GameObject r_Enemy;
+    public GameObject r_Enemy;
+    [SerializeField]
+    private WheelRotating _colorWheel;
+    [SerializeField]
+    private GameObject _combatSystemGO;
+    private CombatSystem _combatSystem;
+   
 
     [Header("TickRate")]
     [SerializeField]
     private float t_TickRate = 1.5f;
     private float t_Chrono =10f;
     private bool t_FirstTick = true;
-    
+
     // private List<Enemy> Enemies = new List<Enemy>();
     // Start is called before the first frame update
     // void Start()
@@ -71,15 +79,23 @@ public class LevelController : Singleton<LevelController>
     //     SpawnXEnemies(v_nbEnemy);
     // }
 
+    public void Start()
+    {
+        
+        
+    }
+
     private void LateUpdate() {
         if (!v_LevelGenerated)
         {
         // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
         GameObject level = GameObject.Find("Level");
         p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        _combatSystemGO = p_Player.gameObject.transform.GetComponentInChildren<CombatSystem>().gameObject;
+        _combatSystem = _combatSystemGO.GetComponent<CombatSystem>();
+            _combatSystemGO.SetActive(false);
 
-
-          int childCount = level.transform.childCount;
+            int childCount = level.transform.childCount;
         for (int i = 0; i < childCount; i++)
         {
             Transform childTransform = level.transform.GetChild(i);
@@ -109,10 +125,9 @@ public class LevelController : Singleton<LevelController>
     // Update is called once per frame
     void Update()
     {
-        if (v_LevelGenerated)
-        {
-            
-            
+        if (v_LevelGenerated && !_combatSystem.isActiveAndEnabled)
+
+        {          
             if (t_Chrono < t_TickRate )
                 t_Chrono += Time.deltaTime;
             else
@@ -140,6 +155,7 @@ public class LevelController : Singleton<LevelController>
                 t_FirstTick = !t_FirstTick;
             }
         }
+     
     }
 
     // Utiliser la liste de scripts Tile récupérée
@@ -254,8 +270,15 @@ public class LevelController : Singleton<LevelController>
         if (newTile != null && newTile.IsEnemy())
         {
             //TODO: Déclencle le combat
+            newTile.r_Enemy.transform.LookAt(p_Player.transform);
+            _combatSystemGO.SetActive(true);
+            _combatSystem.SetColorWheel(_colorWheel);
+            _combatSystem.SetEnemy(newTile.r_Enemy);
+            _isInCombat = true;
+            return null;
+
         }
-        if(newTile != null)
+        else if(newTile != null)
             return newTile;
         else return null;
         
