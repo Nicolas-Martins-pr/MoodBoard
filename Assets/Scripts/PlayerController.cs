@@ -26,6 +26,9 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private float v_RotationDuration = 0.5f;
 
+    [SerializeField]
+    private bool v_MoveSpeedUp = false;
+
     [Header("DelayMovement")]
     [SerializeField]
     private float d_TickRate = 1.5f; // Delay entre 2 movmement
@@ -209,7 +212,20 @@ public class PlayerController : Singleton<PlayerController>
         if (other.tag == "BlocUpgrade")
         {
             // Donner le power up
+            if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.VitesseUp)
+            {
+                v_MoveSpeedUp = true;
+                d_TickRate = 0.5f;
+            }
+            else if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.ExtraShot)
+            {
+                LevelController.Instance._combatSystem._amelioration.hasBadAimAnnulator = true;
+            }
+            else if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.SlowBlackCombat)
+            {
+                LevelController.Instance._combatSystem._amelioration.hasTimerBonus = true;
 
+            }
             Destroy(other.gameObject);
         }
     }

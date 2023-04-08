@@ -21,7 +21,7 @@ public class CombatSystem : MonoBehaviour
     [SerializeField]
     private SphereMethod _sphereMethod;
     [SerializeField]
-    private Amelioration _amelioration;
+    public Amelioration _amelioration;
 
     
     private WheelRotating _colorWheel;

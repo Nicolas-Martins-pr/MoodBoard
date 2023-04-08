@@ -41,7 +41,7 @@ public class LevelController : Singleton<LevelController>
     private WheelRotating _colorWheel;
     [SerializeField]
     private GameObject _combatSystemGO;
-    private CombatSystem _combatSystem;
+    public CombatSystem _combatSystem;
    
 
     [Header("TickRate")]
@@ -138,7 +138,10 @@ public class LevelController : Singleton<LevelController>
                 t_Chrono = 0f;    
                 t_FirstTick = !t_FirstTick;
             }
+             CheckVictory();
         }
+
+       
      
     }
 
@@ -197,6 +200,15 @@ public class LevelController : Singleton<LevelController>
         r_BossTile.SetIsEnemy(true,enemy.gameObject);
         enemy.transform.SetParent(tileTransform);
 
+    }
+
+    private void CheckVictory()
+    {
+        if (!r_BossTile.IsEnemy())
+        {
+            //Load end scene
+            Debug.Log("Win");
+        }
     }
     private void SpawnXEnemies(int nbEnemy)
     {
