@@ -206,7 +206,7 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Upgrade")
+        if (other.tag == "BlocUpgrade")
         {
             // Donner le power up
 

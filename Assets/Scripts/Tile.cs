@@ -83,6 +83,11 @@ public class Tile : MonoBehaviour
     {
         return r_Upgrade;
     }
+
+    public bool IsPlayer()
+    {
+        return v_isPlayer;
+    }
     public TilePosition GetPosition()
     {
         return v_position;

@@ -122,6 +122,8 @@ public class LevelController : Singleton<LevelController>
         // }
 
         SpawnXEnemies(v_nbEnemy);
+        SpawnUpgrade(3);
+        SpawnBoss();
         v_LevelGenerated = true;
         }
     }
@@ -184,11 +186,26 @@ public class LevelController : Singleton<LevelController>
         tempTileList.Shuffle();
         int it = 0;
         int upgradeSet = 0;
-        while (it < tempTileList.Count || upgradeSet == nbUpgrade)
+        while (it < tempTileList.Count && upgradeSet != nbUpgrade)
         {
             if(tempTileList[it].gameObject.tag == "BlocUpgrade")
             {
-
+                GameObject up = Instantiate(r_Upgrade, new Vector3 (tempTileList[it].gameObject.transform.position.x,1.5f ,tempTileList[it].gameObject.transform.position.z), tempTileList[it].gameObject.transform.rotation, null);
+                switch (upgradeSet)
+                {
+                    case 0:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.VitesseUp);
+                    break;
+                    case 1:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.ExtraShot);
+                    break;
+                    case 2:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.SlowBlackCombat);
+                    break;
+                    default:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.VitesseUp);
+                    break;
+                }
                 upgradeSet++;
             }
 
@@ -198,6 +215,11 @@ public class LevelController : Singleton<LevelController>
     }
 
     #region EnemyControl
+
+    private void SpawnBoss()
+    {
+
+    }
     private void SpawnXEnemies(int nbEnemy)
     {
         int nbSpawned = nbEnemy;
@@ -243,7 +265,7 @@ public class LevelController : Singleton<LevelController>
         TilePosition Next_enemyPosition = TilePosition.GetNextTilePositionWithVector3(enemyDirection, enemyPosition);
         Tile newTile =  GetTileAroundFromPosition(enemy.GetComponentInParent<Tile>(), Next_enemyPosition);
         
-        if(newTile != null && !newTile.IsEnemy() && !newTile.IsUpgrade())
+        if(newTile != null && !newTile.IsEnemy() && !newTile.IsUpgrade() && !newTile.IsPlayer())
             return newTile;
         else return null;
         

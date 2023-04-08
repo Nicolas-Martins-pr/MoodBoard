@@ -45,6 +45,8 @@ public class WheelRotating : MonoBehaviour
     
     void Update()
 {
+    if(LevelController.Instance.v_isInCombat)
+    {
         if (!rotating)
         {
             if (Input.GetKeyDown(KeyCode.A) && !inputProcessed)
@@ -111,6 +113,7 @@ public class WheelRotating : MonoBehaviour
             inputProcessed = false;
         }
     }
+}
     public string GetActualColor()
     {
         if (totalRotation >= 360 || totalRotation <= -360)
