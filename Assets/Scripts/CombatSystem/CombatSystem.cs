@@ -22,15 +22,19 @@ public class CombatSystem : MonoBehaviour
     private SphereMethod _sphereMethod;
     [SerializeField]
     public Amelioration _amelioration;
+    [SerializeField] ParticleSystem inkParticle;
 
-    
     private WheelRotating _colorWheel;
 
     [SerializeField]
     private GameObject _enemy;
     private GameObject _body;
     private GameObject _head;
-    
+    [SerializeField]
+    private Camera _camera;
+
+    [SerializeField]
+    private ParticlesController _particle;
 
     private int _niceAim = 0;
     private int _badAim = 0;
@@ -52,7 +56,7 @@ public class CombatSystem : MonoBehaviour
     
     private int _badAimAnulator;
     private float _timerBonus;
-
+    private RaycastHit _hit;
 
     private float _score=0;
     
@@ -100,16 +104,18 @@ public class CombatSystem : MonoBehaviour
     public void Update()
     {               
         if (Input.GetKeyDown(KeyCode.Mouse0)){
-            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
-            if (hit.collider != null)
+            Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition).origin, _camera.ScreenPointToRay(Input.mousePosition).direction,out _hit, 10, LayerMask.GetMask("Couleur"));
+            if (_hit.collider != null)
             {
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Couleur"))
+                if (_hit.collider.gameObject.layer == LayerMask.NameToLayer("Couleur"))
                 {
                     Debug.Log("Couleur");
                     //changer la couleur ici
                     _actualColor = _colorWheel.GetActualColor();
-                    if (_pairCouleur.CouleurComplementaire(_actualColor, hit.collider.gameObject.GetComponent<Renderer>().material.color))
+                    if (_pairCouleur.CouleurComplementaire(_actualColor, _hit.collider.gameObject.GetComponent<Renderer>().material.color))
                     {
+                       // _particle.paintColor = _hit.collider.gameObject.GetComponent<Renderer>().material.color;
+                        inkParticle.Play();
                         //StartCoroutine(_sphereMethod.LaunchSphere());
                         _sphereMethod.DisableSphere();
                         Debug.Log("Couleur Complementaire");
@@ -127,6 +133,10 @@ public class CombatSystem : MonoBehaviour
                 }
             }
         }
+         if (Input.GetMouseButtonDown(0))
+            inkParticle.Play();
+        else if (Input.GetMouseButtonUp(0))
+            inkParticle.Stop();
         EndCombatVerif();
     }
     
