@@ -60,7 +60,7 @@ public class CombatSystem : MonoBehaviour
     {
         _pairCouleur = GetComponent<PairCouleur>();
         _sphereMethod = GetComponent<SphereMethod>();
-        _amelioration = GetComponent<Amelioration>();
+        _amelioration = this.gameObject.GetComponentInParent<Amelioration>();
         
 
     }

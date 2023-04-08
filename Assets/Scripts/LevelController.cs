@@ -292,10 +292,14 @@ public class LevelController : Singleton<LevelController>
     }
 
     //Fonction à transférer dans le levelcontroller 
-
-    public void SetEnemyParent(EnemyController enemy, Tile parent)
+    public void EnemyMovementImmunity(EnemyController enemy)
     {
         enemy.GetComponentInParent<Tile>().SetIsEnemy(false, enemy.gameObject);
+
+    }
+    public void SetEnemyParent(EnemyController enemy, Tile parent)
+    {
+        // enemy.GetComponentInParent<Tile>().SetIsEnemy(false, enemy.gameObject);
         enemy.gameObject.transform.SetParent(parent.transform);
         parent.SetIsEnemy(true,enemy.gameObject);
     }
@@ -315,6 +319,7 @@ public class LevelController : Singleton<LevelController>
             //TODO: Déclencle le combat
             
             newTile.r_Enemy.transform.LookAt(p_Player.transform);
+            
             _combatSystemGO.SetActive(true);
             _combatSystem.SetColorWheel(_colorWheel);
             _combatSystem.SetEnemy(newTile.r_Enemy);

@@ -219,11 +219,11 @@ public class PlayerController : Singleton<PlayerController>
             }
             else if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.ExtraShot)
             {
-                LevelController.Instance._combatSystem._amelioration.hasBadAimAnnulator = true;
+                this.gameObject.GetComponent<Amelioration>().hasBadAimAnnulator = true;
             }
             else if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.SlowBlackCombat)
             {
-                LevelController.Instance._combatSystem._amelioration.hasTimerBonus = true;
+                this.gameObject.GetComponent<Amelioration>().hasTimerBonus = true;
 
             }
             Destroy(other.gameObject);

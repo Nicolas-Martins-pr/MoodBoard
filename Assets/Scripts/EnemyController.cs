@@ -115,6 +115,7 @@ public class EnemyController : MonoBehaviour
         //While tant que pas arrivé à la position.
         //SetParent quand arrivé comtroller
         float time = 0f;
+        LevelController.Instance.EnemyMovementImmunity(this);
         Vector3 targetPosition = new Vector3(newTile.transform.position.x, 1.5f ,newTile.transform.position.z);
         Transform tileTransform = this.GetComponentInParent<Tile>().transform;
         Vector3 startPosition = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
