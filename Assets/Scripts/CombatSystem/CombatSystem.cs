@@ -218,5 +218,11 @@ public class CombatSystem : MonoBehaviour
     {
         _colorWheel = colorWheel;
     }
+    public float GetScore()
+    {
+        {
+            return _score;
+        }
+    }
 }
 
