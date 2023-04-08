@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class WheelRotating : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class WheelRotating : MonoBehaviour
 
     private Dictionary<float, string> _pairsCouleurDegPos = new Dictionary<float, string>();
     private Dictionary<float, string> _pairsCouleurDegNeg = new Dictionary<float, string>();
+
 
     public void Start()
     {
@@ -41,8 +43,10 @@ public class WheelRotating : MonoBehaviour
         _pairsCouleurDegNeg.Add(-315f, "Rouge");
         
         _currentColor = "Rose";
+
+
     }
-    
+
     void Update()
 {
     if(LevelController.Instance.v_isInCombat)
@@ -80,14 +84,45 @@ public class WheelRotating : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             if (Quaternion.Angle(transform.rotation, targetRotation) < 0.1f)
             {
-                rotating = false;     
-
+                rotating = false;
+                
                 if (totalRotation >= 360f || totalRotation <= -360f)
                 {
                     transform.rotation = Quaternion.identity;
                     totalRotation = 0f;
                 }
-                
+
+/*                switch (Mathf.Round(totalRotation))
+                {
+                    case 0f:
+                        feelingText.text = "Caring";
+                        break;
+                    case 45f:
+                        feelingText.text = "Respected";
+                        break;
+                    case 90f:
+                        feelingText.text = "Hopeful";
+                        break;
+                    case 135:
+                        feelingText.text = "Affectionate";
+                        break;
+                    case 180:
+                        feelingText.text = "Excluded";
+                        break;
+                    case 225:
+                        feelingText.text = "Annoyed";
+                        break;
+                    case 270:
+                        feelingText.text = "Powerless";
+                        break;
+                    case 315:
+                        feelingText.text = "Lonely";
+                        break;
+                    default:
+                        Debug.Log("error feeling");
+                        break;
+                }
+                */
                 if (nextRotation != '0')
                 {
                     rotating = true;
