@@ -51,18 +51,21 @@ public class PlayerController : Singleton<PlayerController>
     // Update is called once per frame
     void Update()
     {
-        CheckDuration();
-        CheckInput();
-        //Prise en compte des inputs
-        if (d_Chrono < d_TickRate )
-            d_Chrono += Time.deltaTime;
-            
-        else
-        {   
-            if (_Action)
-                MakeMovement();
-           //DoMovement selected
-        //    d_Chrono = 0f; 
+        if(!LevelController.Instance.v_isInCombat)
+        {
+            CheckDuration();
+            CheckInput();
+            //Prise en compte des inputs
+            if (d_Chrono < d_TickRate )
+                d_Chrono += Time.deltaTime;
+                
+            else
+            {   
+                if (_Action)
+                    MakeMovement();
+            //DoMovement selected
+            //    d_Chrono = 0f; 
+            }
         }
     }
 
@@ -200,5 +203,14 @@ public class PlayerController : Singleton<PlayerController>
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
         return  Physics.Raycast(transform.position, transform.forward, out d_FrontWallHit, d_WallCheckDistance, LayerMask.GetMask("Wall"));     
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.tag == "Upgrade")
+        {
+            // Donner le power up
+
+            Destroy(other.gameObject);
+        }
     }
 }

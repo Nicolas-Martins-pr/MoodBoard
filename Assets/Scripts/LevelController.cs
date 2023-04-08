@@ -11,7 +11,7 @@ public class LevelController : Singleton<LevelController>
     [Header("Variables")]
     [SerializeField]
     private int v_nbEnemy;
-    private bool _isInCombat = false;
+    public bool v_isInCombat = false;
 
     private bool v_LevelGenerated = false;
 
@@ -31,6 +31,9 @@ public class LevelController : Singleton<LevelController>
     private GameObject r_StartLevel;
     [SerializeField]
     public GameObject r_Enemy;
+
+    [SerializeField]
+    public GameObject r_Upgrade;
     [SerializeField]
     private WheelRotating _colorWheel;
     [SerializeField]
@@ -138,7 +141,11 @@ public class LevelController : Singleton<LevelController>
                     int EnemiesListFirstHalf = (int)Math.Ceiling(r_EnemiesList.Count / 2f);
                     for (int i = 0; i < EnemiesListFirstHalf; i++)
                     {
-                        StartCoroutine(r_EnemiesList[i].ChoseComportement());
+                        if (r_EnemiesList[i] != null)
+                        {
+                            StartCoroutine(r_EnemiesList[i].ChoseComportement());
+                        }
+                        
                     }
                 }
                 else
@@ -146,7 +153,10 @@ public class LevelController : Singleton<LevelController>
                     int EnemiesListLastHalf =(int) Math.Ceiling(r_EnemiesList.Count / 2f);
                     for (int j = EnemiesListLastHalf; j < r_EnemiesList.Count; j++)
                     {
+                        if (r_EnemiesList[j] != null)
+                        {
                         StartCoroutine(r_EnemiesList[j].ChoseComportement());
+                        }
                     }
                     // Update l'autre moitié des unites
                 }
@@ -168,6 +178,25 @@ public class LevelController : Singleton<LevelController>
     }
 
 
+    private void SpawnUpgrade(int nbUpgrade)
+    {
+        List<Tile> tempTileList = r_LevelTileList.ToList();
+        tempTileList.Shuffle();
+        int it = 0;
+        int upgradeSet = 0;
+        while (it < tempTileList.Count || upgradeSet == nbUpgrade)
+        {
+            if(tempTileList[it].gameObject.tag == "BlocUpgrade")
+            {
+
+                upgradeSet++;
+            }
+
+            it++;
+        }
+
+    }
+
     #region EnemyControl
     private void SpawnXEnemies(int nbEnemy)
     {
@@ -183,6 +212,8 @@ public class LevelController : Singleton<LevelController>
             SpawnEnemyInTile(tempTileList[i]);
         }
     }
+
+    
 
     private void SpawnEnemyInTile(Tile tile)
     {
@@ -270,11 +301,13 @@ public class LevelController : Singleton<LevelController>
         if (newTile != null && newTile.IsEnemy())
         {
             //TODO: Déclencle le combat
+            
             newTile.r_Enemy.transform.LookAt(p_Player.transform);
             _combatSystemGO.SetActive(true);
             _combatSystem.SetColorWheel(_colorWheel);
             _combatSystem.SetEnemy(newTile.r_Enemy);
-            _isInCombat = true;
+            newTile.SetIsEnemy(false,newTile.r_Enemy.gameObject);
+            v_isInCombat = true;
             return null;
 
         }
@@ -289,6 +322,11 @@ public class LevelController : Singleton<LevelController>
         p_Player.GetComponentInParent<Tile>().SetIsPlayer(false);
         p_Player.gameObject.transform.SetParent(parent.transform);
         parent.SetIsPlayer(true);
+    }
+
+    public void EndCombat()
+    {
+        v_isInCombat = false;
     }
 
      

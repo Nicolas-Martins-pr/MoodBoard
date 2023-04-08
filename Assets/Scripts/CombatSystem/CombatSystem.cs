@@ -67,7 +67,7 @@ public class CombatSystem : MonoBehaviour
     public void OnEnable()
     {
        // SetEnemy(_enemy);
-        //Verifie la présence d'amélioration et les appliquent
+        //Verifie la prï¿½sence d'amï¿½lioration et les appliquent
         if (_amelioration != null) { 
             if (_amelioration.hasBadAimAnnulator == true)
             {
@@ -86,7 +86,7 @@ public class CombatSystem : MonoBehaviour
                 _timerBonus = 0;
             }
         }
-        //Assigne les valeurs de combat à chaque nouveau combat
+        //Assigne les valeurs de combat ï¿½ chaque nouveau combat
         _totalBlackColor = 0;
         _totalColor = 0;
         _niceAim = 0;
@@ -142,7 +142,7 @@ public class CombatSystem : MonoBehaviour
         
     }
     
-    //Vérifie si le combat est fini
+    //Vï¿½rifie si le combat est fini
     private void EndCombatVerif()
     {
        /* Debug.Log("Total color" + _totalColor);
@@ -188,7 +188,12 @@ public class CombatSystem : MonoBehaviour
         //A regarder
         _sphereMethod.DisableSphere();
        // _enemy.gameObject.SetActive(false);
+        Destroy(_enemy);
         gameObject.SetActive(false);
+
+        //RÃ©active le mouvement
+        LevelController.Instance.EndCombat();
+
     }
     public void SetEnemy(GameObject enemy)
     {
