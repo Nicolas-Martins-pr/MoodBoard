@@ -20,6 +20,9 @@ public class LevelController : Singleton<LevelController>
     [SerializeField]
     private PlayerController p_Player;
 
+    [SerializeField]
+    private Tile r_BossTile;
+
 
     [SerializeField]
     private List<Tile> r_LevelTileList = new List<Tile>();
@@ -49,38 +52,6 @@ public class LevelController : Singleton<LevelController>
 
     // private List<Enemy> Enemies = new List<Enemy>();
     // Start is called before the first frame update
-    // void Start()
-    // {
-    //     // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
-    //     GameObject level = GameObject.Find("Level");
-    //     p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-
-
-    //       int childCount = level.transform.childCount;
-    //     for (int i = 0; i < childCount; i++)
-    //     {
-    //         Transform childTransform = level.transform.GetChild(i);
-    //         Tile[] tileArray =  childTransform.GetComponentsInChildren<Tile>();
-    //         r_LevelTileList.AddRange(tileArray);
-    //     }
-
-
-
-    //     // Tile[] tileArray = level.GetComponentsInChildren<Tile>();
-    //     // r_LevelTileList = new List<Tile>(tileArray);
-
-    //     // Vérifier si les scripts Tile ont été récupérés
-    //     if (r_LevelTileList.Count > 0)
-    //     {
-    //         Debug.Log("Nombre de Tile récupérés : " + r_LevelTileList.Count);
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("Aucun Tile trouvé !");
-    //     }
-
-    //     SpawnXEnemies(v_nbEnemy);
-    // }
 
     public void Start()
     {
@@ -94,6 +65,7 @@ public class LevelController : Singleton<LevelController>
         // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
         GameObject level = GameObject.Find("Level");
         p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        r_BossTile = GameObject.FindWithTag("Boss").GetComponent<Tile>();
         _combatSystemGO = p_Player.gameObject.transform.GetComponentInChildren<CombatSystem>().gameObject;
         _combatSystem = _combatSystemGO.GetComponent<CombatSystem>();
             _combatSystemGO.SetActive(false);
@@ -218,6 +190,12 @@ public class LevelController : Singleton<LevelController>
 
     private void SpawnBoss()
     {
+        Transform tileTransform = r_BossTile.transform;
+        Vector3 posSpawnBoss = new Vector3(tileTransform.position.x, 2f ,tileTransform.position.z);
+        GameObject enemy = Instantiate(r_Enemy, posSpawnBoss, tileTransform.rotation, null);
+        enemy.transform.localScale = new Vector3(2f,2f,2f);
+        r_BossTile.SetIsEnemy(true,enemy.gameObject);
+        enemy.transform.SetParent(tileTransform);
 
     }
     private void SpawnXEnemies(int nbEnemy)
