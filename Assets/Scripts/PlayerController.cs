@@ -26,6 +26,9 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField]
     private float v_RotationDuration = 0.5f;
 
+    [SerializeField]
+    private bool v_MoveSpeedUp = false;
+
     [Header("DelayMovement")]
     [SerializeField]
     private float d_TickRate = 1.5f; // Delay entre 2 movmement
@@ -51,18 +54,21 @@ public class PlayerController : Singleton<PlayerController>
     // Update is called once per frame
     void Update()
     {
-        CheckDuration();
-        CheckInput();
-        //Prise en compte des inputs
-        if (d_Chrono < d_TickRate )
-            d_Chrono += Time.deltaTime;
-            
-        else
-        {   
-            if (_Action)
-                MakeMovement();
-           //DoMovement selected
-        //    d_Chrono = 0f; 
+        if(!LevelController.Instance.v_isInCombat)
+        {
+            CheckDuration();
+            CheckInput();
+            //Prise en compte des inputs
+            if (d_Chrono < d_TickRate )
+                d_Chrono += Time.deltaTime;
+                
+            else
+            {   
+                if (_Action)
+                    MakeMovement();
+            //DoMovement selected
+            //    d_Chrono = 0f; 
+            }
         }
     }
 
@@ -200,5 +206,27 @@ public class PlayerController : Singleton<PlayerController>
     {
         //Raycast pour voir si wall en face. Si wall obligé de rotate sinon 25% rotate 75% Move forward
         return  Physics.Raycast(transform.position, transform.forward, out d_FrontWallHit, d_WallCheckDistance, LayerMask.GetMask("Wall"));     
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.tag == "BlocUpgrade")
+        {
+            // Donner le power up
+            if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.VitesseUp)
+            {
+                v_MoveSpeedUp = true;
+                d_TickRate = 0.5f;
+            }
+            else if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.ExtraShot)
+            {
+                this.gameObject.GetComponent<Amelioration>().hasBadAimAnnulator = true;
+            }
+            else if(other.gameObject.GetComponent<Upgrade>().GetUpgradeType() == UpgradeType.SlowBlackCombat)
+            {
+                this.gameObject.GetComponent<Amelioration>().hasTimerBonus = true;
+
+            }
+            Destroy(other.gameObject);
+        }
     }
 }

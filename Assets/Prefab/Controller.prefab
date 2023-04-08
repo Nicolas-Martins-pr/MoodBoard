@@ -45,10 +45,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   v_nbEnemy: 3
+  v_isInCombat: 0
   p_Player: {fileID: 0}
   r_LevelTileList: []
   r_EnemiesList: []
   r_TilePrefab: {fileID: 0}
   r_StartLevel: {fileID: 0}
   r_Enemy: {fileID: 4442622523665934937, guid: c8be8fadc6ae02d41884e85dc8697d7b, type: 3}
+  r_Upgrade: {fileID: 5374353223681303663, guid: 53bd61fba28dfa344a8e97733df63df5, type: 3}
+  _colorWheel: {fileID: 0}
+  _combatSystemGO: {fileID: 0}
   t_TickRate: 1.5

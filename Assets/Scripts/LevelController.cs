@@ -4,12 +4,14 @@ using System.Linq;
 using System;
 using Extensions;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class LevelController : Singleton<LevelController>
 {
     [Header("Variables")]
     [SerializeField]
     private int v_nbEnemy;
+    public bool v_isInCombat = false;
 
     private bool v_LevelGenerated = false;
 
@@ -17,6 +19,9 @@ public class LevelController : Singleton<LevelController>
 
     [SerializeField]
     private PlayerController p_Player;
+
+    [SerializeField]
+    private Tile r_BossTile;
 
 
     [SerializeField]
@@ -28,48 +33,31 @@ public class LevelController : Singleton<LevelController>
     [SerializeField]
     private GameObject r_StartLevel;
     [SerializeField]
-    private GameObject r_Enemy;
+    public GameObject r_Enemy;
+
+    [SerializeField]
+    public GameObject r_Upgrade;
+    [SerializeField]
+    private WheelRotating _colorWheel;
+    [SerializeField]
+    private GameObject _combatSystemGO;
+    public CombatSystem _combatSystem;
+   
 
     [Header("TickRate")]
     [SerializeField]
     private float t_TickRate = 1.5f;
     private float t_Chrono =10f;
     private bool t_FirstTick = true;
-    
+
     // private List<Enemy> Enemies = new List<Enemy>();
     // Start is called before the first frame update
-    // void Start()
-    // {
-    //     // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
-    //     GameObject level = GameObject.Find("Level");
-    //     p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
-
-    //       int childCount = level.transform.childCount;
-    //     for (int i = 0; i < childCount; i++)
-    //     {
-    //         Transform childTransform = level.transform.GetChild(i);
-    //         Tile[] tileArray =  childTransform.GetComponentsInChildren<Tile>();
-    //         r_LevelTileList.AddRange(tileArray);
-    //     }
-
-
-
-    //     // Tile[] tileArray = level.GetComponentsInChildren<Tile>();
-    //     // r_LevelTileList = new List<Tile>(tileArray);
-
-    //     // Vérifier si les scripts Tile ont été récupérés
-    //     if (r_LevelTileList.Count > 0)
-    //     {
-    //         Debug.Log("Nombre de Tile récupérés : " + r_LevelTileList.Count);
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("Aucun Tile trouvé !");
-    //     }
-
-    //     SpawnXEnemies(v_nbEnemy);
-    // }
+    public void Start()
+    {
+        
+        
+    }
 
     private void LateUpdate() {
         if (!v_LevelGenerated)
@@ -77,9 +65,12 @@ public class LevelController : Singleton<LevelController>
         // Récupérer tous les scripts Tile dans les enfants du GameObject parent "Level"
         GameObject level = GameObject.Find("Level");
         p_Player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        r_BossTile = GameObject.FindWithTag("Boss").GetComponent<Tile>();
+        _combatSystemGO = p_Player.gameObject.transform.GetComponentInChildren<CombatSystem>().gameObject;
+        _combatSystem = _combatSystemGO.GetComponent<CombatSystem>();
+            _combatSystemGO.SetActive(false);
 
-
-          int childCount = level.transform.childCount;
+            int childCount = level.transform.childCount;
         for (int i = 0; i < childCount; i++)
         {
             Transform childTransform = level.transform.GetChild(i);
@@ -103,16 +94,17 @@ public class LevelController : Singleton<LevelController>
         // }
 
         SpawnXEnemies(v_nbEnemy);
+        SpawnUpgrade(3);
+        SpawnBoss();
         v_LevelGenerated = true;
         }
     }
     // Update is called once per frame
     void Update()
     {
-        if (v_LevelGenerated)
-        {
-            
-            
+        if (v_LevelGenerated && !_combatSystem.isActiveAndEnabled)
+
+        {          
             if (t_Chrono < t_TickRate )
                 t_Chrono += Time.deltaTime;
             else
@@ -123,7 +115,11 @@ public class LevelController : Singleton<LevelController>
                     int EnemiesListFirstHalf = (int)Math.Ceiling(r_EnemiesList.Count / 2f);
                     for (int i = 0; i < EnemiesListFirstHalf; i++)
                     {
-                        StartCoroutine(r_EnemiesList[i].ChoseComportement());
+                        if (r_EnemiesList[i] != null)
+                        {
+                            StartCoroutine(r_EnemiesList[i].ChoseComportement());
+                        }
+                        
                     }
                 }
                 else
@@ -131,7 +127,10 @@ public class LevelController : Singleton<LevelController>
                     int EnemiesListLastHalf =(int) Math.Ceiling(r_EnemiesList.Count / 2f);
                     for (int j = EnemiesListLastHalf; j < r_EnemiesList.Count; j++)
                     {
+                        if (r_EnemiesList[j] != null)
+                        {
                         StartCoroutine(r_EnemiesList[j].ChoseComportement());
+                        }
                     }
                     // Update l'autre moitié des unites
                 }
@@ -139,7 +138,11 @@ public class LevelController : Singleton<LevelController>
                 t_Chrono = 0f;    
                 t_FirstTick = !t_FirstTick;
             }
+             CheckVictory();
         }
+
+       
+     
     }
 
     // Utiliser la liste de scripts Tile récupérée
@@ -152,7 +155,61 @@ public class LevelController : Singleton<LevelController>
     }
 
 
+    private void SpawnUpgrade(int nbUpgrade)
+    {
+        List<Tile> tempTileList = r_LevelTileList.ToList();
+        tempTileList.Shuffle();
+        int it = 0;
+        int upgradeSet = 0;
+        while (it < tempTileList.Count && upgradeSet != nbUpgrade)
+        {
+            if(tempTileList[it].gameObject.tag == "BlocUpgrade")
+            {
+                GameObject up = Instantiate(r_Upgrade, new Vector3 (tempTileList[it].gameObject.transform.position.x,1.5f ,tempTileList[it].gameObject.transform.position.z), tempTileList[it].gameObject.transform.rotation, null);
+                switch (upgradeSet)
+                {
+                    case 0:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.VitesseUp);
+                    break;
+                    case 1:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.ExtraShot);
+                    break;
+                    case 2:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.SlowBlackCombat);
+                    break;
+                    default:
+                    up.GetComponent<Upgrade>().SetUpgrateType(UpgradeType.VitesseUp);
+                    break;
+                }
+                upgradeSet++;
+            }
+
+            it++;
+        }
+
+    }
+
     #region EnemyControl
+
+    private void SpawnBoss()
+    {
+        Transform tileTransform = r_BossTile.transform;
+        Vector3 posSpawnBoss = new Vector3(tileTransform.position.x, 2f ,tileTransform.position.z);
+        GameObject enemy = Instantiate(r_Enemy, posSpawnBoss, tileTransform.rotation, null);
+        enemy.transform.localScale = new Vector3(2f,2f,2f);
+        r_BossTile.SetIsEnemy(true,enemy.gameObject);
+        enemy.transform.SetParent(tileTransform);
+
+    }
+
+    private void CheckVictory()
+    {
+        if (!r_BossTile.IsEnemy())
+        {
+            //Load end scene
+            Debug.Log("Win");
+        }
+    }
     private void SpawnXEnemies(int nbEnemy)
     {
         int nbSpawned = nbEnemy;
@@ -167,6 +224,8 @@ public class LevelController : Singleton<LevelController>
             SpawnEnemyInTile(tempTileList[i]);
         }
     }
+
+    
 
     private void SpawnEnemyInTile(Tile tile)
     {
@@ -196,7 +255,7 @@ public class LevelController : Singleton<LevelController>
         TilePosition Next_enemyPosition = TilePosition.GetNextTilePositionWithVector3(enemyDirection, enemyPosition);
         Tile newTile =  GetTileAroundFromPosition(enemy.GetComponentInParent<Tile>(), Next_enemyPosition);
         
-        if(newTile != null && !newTile.IsEnemy() && !newTile.IsUpgrade())
+        if(newTile != null && !newTile.IsEnemy() && !newTile.IsUpgrade() && !newTile.IsPlayer())
             return newTile;
         else return null;
         
@@ -233,10 +292,14 @@ public class LevelController : Singleton<LevelController>
     }
 
     //Fonction à transférer dans le levelcontroller 
-
-    public void SetEnemyParent(EnemyController enemy, Tile parent)
+    public void EnemyMovementImmunity(EnemyController enemy)
     {
         enemy.GetComponentInParent<Tile>().SetIsEnemy(false, enemy.gameObject);
+
+    }
+    public void SetEnemyParent(EnemyController enemy, Tile parent)
+    {
+        // enemy.GetComponentInParent<Tile>().SetIsEnemy(false, enemy.gameObject);
         enemy.gameObject.transform.SetParent(parent.transform);
         parent.SetIsEnemy(true,enemy.gameObject);
     }
@@ -254,8 +317,18 @@ public class LevelController : Singleton<LevelController>
         if (newTile != null && newTile.IsEnemy())
         {
             //TODO: Déclencle le combat
+            
+            newTile.r_Enemy.transform.LookAt(p_Player.transform);
+            
+            _combatSystemGO.SetActive(true);
+            _combatSystem.SetColorWheel(_colorWheel);
+            _combatSystem.SetEnemy(newTile.r_Enemy);
+            newTile.SetIsEnemy(false,newTile.r_Enemy.gameObject);
+            v_isInCombat = true;
+            return null;
+
         }
-        if(newTile != null)
+        else if(newTile != null)
             return newTile;
         else return null;
         
@@ -266,6 +339,11 @@ public class LevelController : Singleton<LevelController>
         p_Player.GetComponentInParent<Tile>().SetIsPlayer(false);
         p_Player.gameObject.transform.SetParent(parent.transform);
         parent.SetIsPlayer(true);
+    }
+
+    public void EndCombat()
+    {
+        v_isInCombat = false;
     }
 
      

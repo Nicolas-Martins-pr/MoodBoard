@@ -194,6 +194,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 3222333232950057305, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 10982e8fd7934e84b98f42ad5438bac9, type: 2}
     - target: {fileID: 3293030734864814633, guid: 8a1005b7136133046ad4535207d40255, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -258,6 +262,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 9010070636959442356, guid: 8a1005b7136133046ad4535207d40255, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8282692938810123328, guid: 88a7be22b234a0a4a8841b383a7799f4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

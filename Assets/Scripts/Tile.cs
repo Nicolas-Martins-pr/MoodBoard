@@ -49,7 +49,7 @@ public class Tile : MonoBehaviour
     [SerializeField]
     private GameObject r_Player;
     [SerializeField]
-    private GameObject r_Enemy;
+    public GameObject r_Enemy;
     [SerializeField]
     private GameObject r_Upgrade;
     [SerializeField]
@@ -82,6 +82,11 @@ public class Tile : MonoBehaviour
     public bool IsUpgrade()
     {
         return r_Upgrade;
+    }
+
+    public bool IsPlayer()
+    {
+        return v_isPlayer;
     }
     public TilePosition GetPosition()
     {
