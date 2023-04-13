@@ -43,8 +43,6 @@ public class SphereMethod : MonoBehaviour
             _randomPos = collid.bounds.center + Random.insideUnitSphere*0.5f * collid.bounds.extents.magnitude;
             _randomPos =  collid.ClosestPoint(_randomPos);
             _sphere.transform.position = _randomPos + collid.transform.forward * distanceToTarget / _distanceDivid;
-            Debug.Log(_randomPos);
-            Debug.Log(collid.bounds.center);
             _sphere.gameObject.SetActive(true);
             isEnabled = true;
         }

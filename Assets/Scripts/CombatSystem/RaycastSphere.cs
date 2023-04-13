@@ -46,12 +46,9 @@ public class RaycastSphere : MonoBehaviour
             // Faites ici ce que vous voulez avec les collisions détectées
             potentialTargets.Add(hit.collider.gameObject);
             // Dessin des lignes de débogage pour chaque raycast
-            Debug.DrawLine(transform.position, hit.point, Color.red);
         }
-            Debug.Log(potentialTargets.Count);
             if (potentialTargets.Count > 0)
             {
-                Debug.Log(potentialTargets);
                 return potentialTargets;
             }
             else

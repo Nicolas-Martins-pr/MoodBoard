@@ -23,10 +23,10 @@ public class ParticlesController: MonoBehaviour{
 
     void OnParticleCollision(GameObject other) {
         int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);
-        Debug.Log("Ah");
+
         Paintable p = other.GetComponent<Paintable>();
         if(p != null){
-            Debug.Log("Bonsoir");
+
             for  (int i = 0; i< numCollisionEvents; i++){
                 Vector3 pos = collisionEvents[i].intersection;
                 float radius = Random.Range(minRadius, maxRadius);
