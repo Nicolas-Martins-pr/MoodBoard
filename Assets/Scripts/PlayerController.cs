@@ -57,13 +57,15 @@ public class PlayerController : Singleton<PlayerController>
         if(!LevelController.Instance.v_isInCombat)
         {
             CheckDuration();
-            CheckInput();
+            if (d_Chrono > d_TickRate/2) 
+                CheckInput();
             //Prise en compte des inputs
             if (d_Chrono < d_TickRate )
                 d_Chrono += Time.deltaTime;
                 
             else
             {   
+                
                 if (_Action)
                     MakeMovement();
             //DoMovement selected
@@ -84,17 +86,17 @@ public class PlayerController : Singleton<PlayerController>
 
     private void CheckInput()
     {
-        if (Input.GetButtonDown("RotateRight"))
+        if (Input.GetButton("RotateRight"))
         {
             v_MovementPlayerState = MovementPlayerState.RotateRight;
             _Action = true;
         }
-        else if (Input.GetButtonDown("RotateLeft"))
+        else if (Input.GetButton("RotateLeft"))
         {
             v_MovementPlayerState = MovementPlayerState.RotateLeft; 
             _Action = true;
         }
-        else if (Input.GetButtonDown("Move"))
+        else if (Input.GetButton("Move"))
         {
             v_MovementPlayerState = MovementPlayerState.MoveForward;   
             _Action = true;
