@@ -10,8 +10,9 @@ public class HealthBar : MonoBehaviour
     private void Start()
     {
         slider = GetComponent<Slider>();
-        SetSliderValue(0.5f);
+        SetSliderValue(50);
     }
+
 
     public void SetSliderValue(float value)
     {

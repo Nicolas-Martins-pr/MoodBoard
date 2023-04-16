@@ -5,6 +5,7 @@ using System;
 using Extensions;
 using UnityEngine;
 using Unity.VisualScripting;
+using TMPro;
 
 public class LevelController : Singleton<LevelController>
 {
@@ -42,7 +43,12 @@ public class LevelController : Singleton<LevelController>
     [SerializeField]
     private GameObject _combatSystemGO;
     public CombatSystem _combatSystem;
-   
+
+    [SerializeField]
+    private HealthBar _healthBar;
+
+    private TextMeshProUGUI timerText;
+
 
     [Header("TickRate")]
     [SerializeField]
@@ -50,13 +56,10 @@ public class LevelController : Singleton<LevelController>
     private float t_Chrono =10f;
     private bool t_FirstTick = true;
 
-    // private List<Enemy> Enemies = new List<Enemy>();
-    // Start is called before the first frame update
 
     public void Start()
     {
-        
-        
+        timerText = _healthBar.gameObject.transform.parent.Find("Timer").gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     private void LateUpdate() {
@@ -78,33 +81,20 @@ public class LevelController : Singleton<LevelController>
             r_LevelTileList.AddRange(tileArray);
         }
 
-
-
-        // Tile[] tileArray = level.GetComponentsInChildren<Tile>();
-        // r_LevelTileList = new List<Tile>(tileArray);
-
-        // Vérifier si les scripts Tile ont été récupérés
-        // if (r_LevelTileList.Count > 0)
-        // {
-        //     Debug.Log("Nombre de Tile récupérés : " + r_LevelTileList.Count);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Aucun Tile trouvé !");
-        // }
-
         SpawnXEnemies(v_nbEnemy);
         SpawnUpgrade(3);
         SpawnBoss();
         v_LevelGenerated = true;
         }
     }
+
+
     // Update is called once per frame
     void Update()
     {
         if (v_LevelGenerated && !_combatSystem.isActiveAndEnabled)
-
         {          
+            // Pas en combat
             if (t_Chrono < t_TickRate )
                 t_Chrono += Time.deltaTime;
             else
@@ -138,11 +128,23 @@ public class LevelController : Singleton<LevelController>
                 t_Chrono = 0f;    
                 t_FirstTick = !t_FirstTick;
             }
-             CheckVictory();
+
+        }
+        if(v_LevelGenerated && _combatSystem.isActiveAndEnabled)
+        {
+            // En combat
+            _healthBar.SetSliderValue(_combatSystem.GetHealth());
+            timerText.text = _combatSystem.GetTimeRemaining().ToString();
+
+            
+            
         }
 
-       
-     
+
+        CheckVictory();
+
+
+
     }
 
     // Utiliser la liste de scripts Tile récupérée
@@ -204,10 +206,11 @@ public class LevelController : Singleton<LevelController>
 
     private void CheckVictory()
     {
-        if (!r_BossTile.IsEnemy())
+        if (v_LevelGenerated && !r_BossTile.IsEnemy())
         {
             //Load end scene
             Debug.Log("Win");
+
         }
     }
     private void SpawnXEnemies(int nbEnemy)
@@ -232,15 +235,14 @@ public class LevelController : Singleton<LevelController>
         Transform tileTransform = tile.transform;
         Vector3 posSpawnEnemy = new Vector3(tileTransform.position.x, 1.5f ,tileTransform.position.z);
         GameObject enemy = Instantiate(r_Enemy, posSpawnEnemy, tileTransform.rotation, null);
+
         tile.SetIsEnemy(true,enemy.gameObject);
         enemy.transform.SetParent(tileTransform);
         r_EnemiesList.Add(enemy.GetComponent<EnemyController>());
     }
-    // private Tile GetTileFromPosition() // trouve une tile en fonction de sa position donné par Tiles
+    
 
     //Modification possible en utilisant le Monobehaviour plutot que enemyController
-    // public TilePosition GetPositionEntity(MonoBehaviour entity)
-    
     public TilePosition GetPositionEntity(MonoBehaviour entity)
     {
             

@@ -58,20 +58,19 @@ public class CombatSystem : MonoBehaviour
     private float _timerBonus;
     private RaycastHit _hit;
 
-    private float _score=0;
+    private float _health = 50;
+
     
     public void Start()
     {
         _pairCouleur = GetComponent<PairCouleur>();
         _sphereMethod = GetComponent<SphereMethod>();
         _amelioration = this.gameObject.GetComponentInParent<Amelioration>();
-        
-
     }
+
     public void OnEnable()
     {
-       // SetEnemy(_enemy);
-        //Verifie la pr�sence d'am�lioration et les appliquent
+        //Verifie la presence d'amelioration et les appliquent
         if (_amelioration != null) { 
             if (_amelioration.hasBadAimAnnulator == true)
             {
@@ -90,52 +89,84 @@ public class CombatSystem : MonoBehaviour
                 _timerBonus = 0;
             }
         }
-        //Assigne les valeurs de combat � chaque nouveau combat
+
+        //Assigne les valeurs de combat a chaque nouveau combat
         _totalBlackColor = 0;
         _totalColor = 0;
         _niceAim = 0;
         _badAim = 0;
+        _health = 50;
         _timerDuration = _combatData.timer;
         _timeIncreaseBlackness = _combatData.timerIncreaseBlackness;
         _niceAimValue = _combatData.niceAimValue;
         _badAimValue = _combatData.badAimValue;
+
+        _timerDuration = 30;
+        _niceAimValue = 6;
+        _badAimValue = 3;
+
         StartCoroutine(TimerCombatCoroutine());
     }  
     public void Update()
-    {               
+    {
         if (Input.GetKeyDown(KeyCode.Mouse0)){
             Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition).origin, _camera.ScreenPointToRay(Input.mousePosition).direction,out _hit, 10, LayerMask.GetMask("Couleur"));
-            if (_hit.collider != null)
+
+            if (_hit.collider != null && _hit.collider.gameObject.layer == LayerMask.NameToLayer("Couleur"))
             {
-                if (_hit.collider.gameObject.layer == LayerMask.NameToLayer("Couleur"))
+                // touche la bulle sur le perso
+
+                Debug.Log("Couleur");
+                //changer la couleur ici
+                _actualColor = _colorWheel.GetActualColor();
+                if (_pairCouleur.CouleurComplementaire(_actualColor, _hit.collider.gameObject.GetComponent<Renderer>().material.color))
                 {
-                    Debug.Log("Couleur");
-                    //changer la couleur ici
-                    _actualColor = _colorWheel.GetActualColor();
-                    if (_pairCouleur.CouleurComplementaire(_actualColor, _hit.collider.gameObject.GetComponent<Renderer>().material.color))
-                    {
-                       // _particle.paintColor = _hit.collider.gameObject.GetComponent<Renderer>().material.color;
-                        inkParticle.Play();
-                        //StartCoroutine(_sphereMethod.LaunchSphere());
-                        _sphereMethod.DisableSphere();
-                        Debug.Log("Couleur Complementaire");
-                        _niceAim++;  
-                    }
-                    else if (_badAimAnulator > 0)
-                    {
-                        _badAimAnulator--;
-                    }
-                    else
-                    {
-                        Debug.Log("Couleur non Complementaire");
-                        _badAim++;
-                    }
+                    // _particle.paintColor = _hit.collider.gameObject.GetComponent<Renderer>().material.color;
+                    inkParticle.Play();
+                    //StartCoroutine(_sphereMethod.LaunchSphere());
+                    _sphereMethod.DisableSphere();
+                    Debug.Log("Couleur Complementaire");
+                    _niceAim++;
+                    _health += _niceAimValue;
+
                 }
+                else if (_badAimAnulator > 0)
+                {
+                    _badAimAnulator--;
+                }
+                else
+                {
+                    Debug.Log("Couleur non Complementaire");
+                    _badAim++;
+                    _health -= _badAimValue;
+                    
+                }
+
+                Debug.Log("En Dedans !!");
+
+            
+
+
+                if (Input.GetMouseButtonDown(0))
+                    inkParticle.Play();
+
+
             }
+            else
+            {
+                // touche le perso mais pas la cible
+                _badAim++;
+                Debug.Log("En Dehors !!");
+                _health -= _badAimValue;
+            }
+
+        _totalBlackColor = _badAim * _badAimValue;
+        _totalColor = _niceAim * _niceAimValue;
+
         }
-         if (Input.GetMouseButtonDown(0))
-            inkParticle.Play();
-        else if (Input.GetMouseButtonUp(0))
+        
+
+        if (Input.GetMouseButtonUp(0))
             inkParticle.Stop();
         EndCombatVerif();
     }
@@ -151,34 +182,39 @@ public class CombatSystem : MonoBehaviour
         }
         
     }
+
+    public float GetTimeRemaining()
+    {
+        return _timeRemaining;
+    }
+
     
     //V�rifie si le combat est fini
     private void EndCombatVerif()
     {
-       /* Debug.Log("Total color" + _totalColor);
-        Debug.Log("Total black color" + _totalBlackColor);       */ 
-        _totalBlackColor = _badAim * _badAimValue + ((_timerDuration - (_timeRemaining+_timerBonus)) * _timeIncreaseBlackness);
-       
-        //Ici pour changer la couleur du material
+
+
+
+        /*        _totalBlackColor = _badAim * _badAimValue + ((_timerDuration - (_timeRemaining+_timerBonus)) * _timeIncreaseBlackness);
+        */
         
-     /*   if (_head != null && _body != null)
-        {
-            Debug.Log("Mon 4x4");
-           Color colores = _head.GetComponent<MeshRenderer>().material.color;
-            _head.GetComponent<MeshRenderer>().material.color = colores* (100-_totalBlackColor);
-            Color colores2 = _body.GetComponent<SkinnedMeshRenderer>().material.color;
-            _body.GetComponent<SkinnedMeshRenderer>().material.color = colores * (100-_totalBlackColor);
+        _totalBlackColor = _badAim * _badAimValue;
 
-
-
-            _head.GetComponent<MeshRenderer>().material.SetFloat("_EmissionColor", _totalBlackColor);
-            _body.GetComponent<SkinnedMeshRenderer>().material.SetFloat("_EmissionColor", _totalBlackColor);*//*
-            
-        }*/
         _totalColor = _niceAim * _niceAimValue;
-        _score = _totalColor + _totalBlackColor;
-        if (_score >= 100 )
+
+
+        if(_health > 99 || _health < 1 ){
             EndCombat();
+        }
+
+        if(_timeRemaining < 1){
+            Debug.Log("FIN  TEMMPPPSSS");
+            EndCombat();
+        }
+        /*
+        Debug.Log(_totalColor + ", " + _totalBlackColor);*/
+        /*        if (_score >= 100 )
+                    EndCombat();*/
 
 
     }
@@ -189,7 +225,7 @@ public class CombatSystem : MonoBehaviour
         Debug.Log("Combat End");
         Debug.Log("Nice Aim : " + _niceAim);
         Debug.Log("Bad Aim : " + _badAim);
-        Debug.Log("Score : " + _score);
+        Debug.Log("Health : " + _health);
         if (_totalBlackColor > _totalColor)
             Debug.Log("You lose");
         else
@@ -214,15 +250,28 @@ public class CombatSystem : MonoBehaviour
     {
         return _enemy;
     }
+
+    public int GetColor()
+    {
+        return (int)(_totalColor);
+    }
+
+    public int GetBlack()
+    {
+
+        return (int) (_totalBlackColor);
+    }
+
+    public int GetHealth(){
+        return (int) (_health);
+    }
+    
+
     public void SetColorWheel(WheelRotating colorWheel)
     {
         _colorWheel = colorWheel;
     }
-    public float GetScore()
-    {
-        {
-            return _score;
-        }
-    }
+
+
 }
 

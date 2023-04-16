@@ -189,6 +189,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &356928668 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3790784761079894397, guid: 07e2ec49a901fe441b36685ea208c7f7, type: 3}
+  m_PrefabInstance: {fileID: 1666736196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbf91df307de174eaa3e56ce984898f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &449356882
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -472,6 +483,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3294383006159961210, guid: cca85a0f08271ca4dbb9fcc3bcf4cede, type: 3}
+      propertyPath: _healthBar
+      value: 
+      objectReference: {fileID: 356928668}
+    - target: {fileID: 3294383006159961210, guid: cca85a0f08271ca4dbb9fcc3bcf4cede, type: 3}
       propertyPath: _colorWheel
       value: 
       objectReference: {fileID: 1698387089}
@@ -538,7 +553,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4097319277732949794, guid: 07e2ec49a901fe441b36685ea208c7f7, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5399431180488564702, guid: 07e2ec49a901fe441b36685ea208c7f7, type: 3}
       propertyPath: m_Pivot.x
@@ -627,6 +642,10 @@ PrefabInstance:
     - target: {fileID: 7156540042385305334, guid: 07e2ec49a901fe441b36685ea208c7f7, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7156540042385305334, guid: 07e2ec49a901fe441b36685ea208c7f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8675046699169758355, guid: 07e2ec49a901fe441b36685ea208c7f7, type: 3}
       propertyPath: m_AnchorMax.x
