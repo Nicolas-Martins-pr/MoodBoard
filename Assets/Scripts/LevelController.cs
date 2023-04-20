@@ -16,6 +16,9 @@ public class LevelController : Singleton<LevelController>
 
     private bool v_LevelGenerated = false;
 
+    [SerializeField]
+    private int v_DodgedNbRoom = 30;
+
     [Header("References")]
 
     [SerializeField]
@@ -82,7 +85,7 @@ public class LevelController : Singleton<LevelController>
         }
 
         SpawnXEnemies(v_nbEnemy);
-        SpawnUpgrade(3);
+        SpawnUpgrade(3,v_DodgedNbRoom);
         SpawnBoss();
         v_LevelGenerated = true;
         }
@@ -157,9 +160,9 @@ public class LevelController : Singleton<LevelController>
     }
 
 
-    private void SpawnUpgrade(int nbUpgrade)
+    private void SpawnUpgrade(int nbUpgrade, int DodgeNbRoom)
     {
-        List<Tile> tempTileList = r_LevelTileList.ToList();
+        List<Tile> tempTileList = r_LevelTileList.GetRange(DodgeNbRoom, r_LevelTileList.Count - DodgeNbRoom);
         tempTileList.Shuffle();
         int it = 0;
         int upgradeSet = 0;
@@ -327,6 +330,7 @@ public class LevelController : Singleton<LevelController>
             _combatSystem.SetEnemy(newTile.r_Enemy);
             newTile.SetIsEnemy(false,newTile.r_Enemy.gameObject);
             v_isInCombat = true;
+            ShowUI.Instance.ActivateUI(true);
             return null;
 
         }
@@ -346,6 +350,7 @@ public class LevelController : Singleton<LevelController>
     public void EndCombat()
     {
         v_isInCombat = false;
+        ShowUI.Instance.ActivateUI(false);
     }
 
      
