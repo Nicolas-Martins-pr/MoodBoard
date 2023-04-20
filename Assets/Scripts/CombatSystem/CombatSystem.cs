@@ -116,7 +116,6 @@ public class CombatSystem : MonoBehaviour
             {
                 // touche la bulle sur le perso
 
-                Debug.Log("Couleur");
                 //changer la couleur ici
                 _actualColor = _colorWheel.GetActualColor();
                 if (_pairCouleur.CouleurComplementaire(_actualColor, _hit.collider.gameObject.GetComponent<Renderer>().material.color))
@@ -142,7 +141,7 @@ public class CombatSystem : MonoBehaviour
                     
                 }
 
-                Debug.Log("En Dedans !!");
+                // Debug.Log("En Dedans !!");
 
             
 
@@ -156,7 +155,7 @@ public class CombatSystem : MonoBehaviour
             {
                 // touche le perso mais pas la cible
                 _badAim++;
-                Debug.Log("En Dehors !!");
+                // Debug.Log("En Dehors !!");
                 _health -= _badAimValue;
             }
 
