@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class WheelRotating : MonoBehaviour
 {
 
-    private float v_duration = .5f;
+    private float v_duration = 0.2f;
     public float rotationSpeed = 30f;
     public float rotationAmount = 45f;
 
