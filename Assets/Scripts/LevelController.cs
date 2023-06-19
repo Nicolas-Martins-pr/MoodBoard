@@ -83,11 +83,14 @@ public class LevelController : Singleton<LevelController>
             Tile[] tileArray =  childTransform.GetComponentsInChildren<Tile>();
             r_LevelTileList.AddRange(tileArray);
         }
-
+        
         SpawnXEnemies(v_nbEnemy);
         SpawnUpgrade(3,v_DodgedNbRoom);
         SpawnBoss();
         v_LevelGenerated = true;
+
+        StartCoroutine(MiniMapController.Instance.CreateConnectionsBloc());
+
         }
     }
 
@@ -151,12 +154,24 @@ public class LevelController : Singleton<LevelController>
     }
 
     // Utiliser la liste de scripts Tile récupérée
-    private void UseTileList()
+    public bool TileListPosition(TilePosition tilePosition)
     {
-        foreach (Tile tile in r_LevelTileList)
+        int i = 0;
+        while (!TilePosition.CompareTilePosition(r_LevelTileList[i].GetPosition(), tilePosition) && i < r_LevelTileList.Count-1)
         {
-            // Faire quelque chose avec chaque script Tile
+            
+            i++;
         }
+        if (TilePosition.CompareTilePosition(r_LevelTileList[i].GetPosition(), tilePosition))
+        { 
+            return true;
+        }
+        else
+        {
+
+            return false;
+        }
+        
     }
 
 

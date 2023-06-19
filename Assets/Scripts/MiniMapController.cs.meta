@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: f9b8023e95bc0e548b3b990a347e2b99
+guid: 368be81c1ef35134683d73fc4c9e8393
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - r_MiniMapBlock: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
