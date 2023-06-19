@@ -93,7 +93,7 @@ public class ProceduralLevelBuilder : MonoBehaviour
         _Level.Add(r_Start.MyGO);
         _LevelBlocPos.Add(v_StartPosition);
         //
-        // MiniMapController.Instance.CreateNewBloc(v_StartPosition);
+        MiniMapController.Instance.CreateNewBloc(v_StartPosition);
 
         GameObject player = Instantiate(r_Player,new Vector3(r_Start.Enter.transform.position.x, 1.5f, r_Start.Enter.transform.position.z), Quaternion.identity);
         player.transform.SetParent(r_Start.Enter.transform);
@@ -140,7 +140,7 @@ public class ProceduralLevelBuilder : MonoBehaviour
         LevelBloc newBloc = ScriptableObject.Instantiate(bloc) as LevelBloc;
         //
         newBloc.InstancePrefab(position);
-        // MiniMapController.Instance.CreateNewBloc(position);
+        MiniMapController.Instance.CreateNewBloc(position);
         newBloc.MyGO.transform.SetParent(_LevelContainer.transform);
         float angle = Vector3.SignedAngle(direction, GetDirectionNewBloc(position,newBloc.Enter.transform.position),Vector3.up);
         newBloc.MyGO.transform.Rotate(new Vector3(0f,- angle,0f));
@@ -290,7 +290,7 @@ public class ProceduralLevelBuilder : MonoBehaviour
         
         
         CreateNewBloc(_NewPos,_directionNewPos, r_End);
-        // MiniMapController.Instance.SetLevelBloc(_LevelBlocs);
+        MiniMapController.Instance.SetLevelBloc(_LevelBlocs);
         // else
         // {
         //     _directionNewPos = GetDirectionNewBloc(_LevelBlocs[itFarestPos].Enter.transform.position,_LevelBlocPos[itFarestPos]);
